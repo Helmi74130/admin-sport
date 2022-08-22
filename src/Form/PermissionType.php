@@ -15,32 +15,25 @@ class PermissionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('isSellDrinks', CheckboxType::class,[
-                'attr' => ['checked'   => 'checked'],
+            ->add('isSellDrinks',null, [
                 'label'    => 'Peut-il vendre des boissons ?',
             ])
-            ->add('isMembersWrite', CheckboxType::class, [
-                'attr' => ['checked'   => 'checked'],
+            ->add('isMembersWrite', null, [
                 'label'    => 'Peut-il modifier un membre ?',
             ])
-            ->add('isMembersRead', CheckboxType::class, [
-                'attr' => ['checked'   => 'checked'],
-                'label'    => 'Peut-il voir un membre ?',
+            ->add('isMembersRead', null, [
+                'label'    => 'Peut-il avoir accés à un membre ?',
             ])
-            ->add('isMembersAdd', CheckboxType::class, [
-                'attr' => ['checked'   => 'checked'],
+            ->add('isMembersAdd', null, [
                 'label'    => 'Peut-il ajouter un membre ?',
             ])
-            ->add('isMembersStatistiqueRead', CheckboxType::class, [
-                'attr' => ['checked'   => 'checked'],
+            ->add('isMembersStatistiqueRead', null, [
                 'label'    => 'Peut-il voir les statistique d\'un membre ?',
             ])
-            ->add('isPaymentSchedulesWrite', CheckboxType::class, [
-                'attr' => ['checked'   => 'checked'],
+            ->add('isPaymentSchedulesWrite', null, [
                 'label'    => 'Peut-il avoir accés aux échéanciés de paiement ?',
             ])
-            ->add('isPaymentSchedulesAdd', CheckboxType::class, [
-                'attr' => ['checked'   => 'checked'],
+            ->add('isPaymentSchedulesAdd', null, [
                 'label'    => 'Peut-il ajouter un échéancié de paiement ?',
             ])
         ;
