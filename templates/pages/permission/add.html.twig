@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Apps | Permission{% endblock %}
+
+{% block body %}
+    <h1 class="m-5">Ajouter une permission</h1>
+    {{ form_start(form) }}
+    <div class="container">
+        <div class="row justify-content-around shadow">
+
+                <div class="col-5 text-center mt-3">{{ form_row(form.isSellDrinks) }}</div>
+                <div class="col-5 text-center mt-3">{{ form_row(form.isMembersWrite) }}</div>
+                <div class="col-5 text-center mt-3">{{ form_row(form.isMembersRead) }}</div>
+                <div class="col-5 text-center mt-3">{{ form_row(form.isMembersAdd) }}</div>
+                <div class="col-5 text-center mt-3">{{ form_row(form.isMembersStatistiqueRead) }}</div>
+                <div class="col-5 text-center mt-3">{{ form_row(form.isPaymentSchedulesWrite) }}</div>
+                <div class="col-5 text-center mt-3">{{ form_row(form.isPaymentSchedulesAdd) }}</div>
+            {{ form_widget(form) }}
+        </div>
+            <button class="btn btn-outline-primary mt-4">Ajouter</button>
+    </div>
+    {{ form_end(form) }}
+
+{% endblock %}

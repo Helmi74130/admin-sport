@@ -16,6 +16,24 @@ class Permission
     #[ORM\Column]
     private ?bool $isSellDrinks = null;
 
+    #[ORM\Column]
+    private ?bool $isMembersWrite = null;
+
+    #[ORM\Column]
+    private ?bool $isMembersRead = null;
+
+    #[ORM\Column]
+    private ?bool $isMembersAdd = null;
+
+    #[ORM\Column]
+    private ?bool $isMembersStatistiqueRead = null;
+
+    #[ORM\Column]
+    private ?bool $isPaymentSchedulesWrite = null;
+
+    #[ORM\Column]
+    private ?bool $isPaymentSchedulesAdd = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +47,78 @@ class Permission
     public function setIsSellDrinks(bool $isSellDrinks): self
     {
         $this->isSellDrinks = $isSellDrinks;
+
+        return $this;
+    }
+
+    public function isIsMembersWrite(): ?bool
+    {
+        return $this->isMembersWrite;
+    }
+
+    public function setIsMembersWrite(bool $isMembersWrite): self
+    {
+        $this->isMembersWrite = $isMembersWrite;
+
+        return $this;
+    }
+
+    public function isIsMembersRead(): ?bool
+    {
+        return $this->isMembersRead;
+    }
+
+    public function setIsMembersRead(bool $isMembersRead): self
+    {
+        $this->isMembersRead = $isMembersRead;
+
+        return $this;
+    }
+
+    public function isIsMembersAdd(): ?bool
+    {
+        return $this->isMembersAdd;
+    }
+
+    public function setIsMembersAdd(bool $isMembersAdd): self
+    {
+        $this->isMembersAdd = $isMembersAdd;
+
+        return $this;
+    }
+
+    public function isIsMembersStatistiqueRead(): ?bool
+    {
+        return $this->isMembersStatistiqueRead;
+    }
+
+    public function setIsMembersStatistiqueRead(bool $isMembersStatistiqueRead): self
+    {
+        $this->isMembersStatistiqueRead = $isMembersStatistiqueRead;
+
+        return $this;
+    }
+
+    public function isIsPaymentSchedulesWrite(): ?bool
+    {
+        return $this->isPaymentSchedulesWrite;
+    }
+
+    public function setIsPaymentSchedulesWrite(bool $isPaymentSchedulesWrite): self
+    {
+        $this->isPaymentSchedulesWrite = $isPaymentSchedulesWrite;
+
+        return $this;
+    }
+
+    public function isIsPaymentSchedulesAdd(): ?bool
+    {
+        return $this->isPaymentSchedulesAdd;
+    }
+
+    public function setIsPaymentSchedulesAdd(bool $isPaymentSchedulesAdd): self
+    {
+        $this->isPaymentSchedulesAdd = $isPaymentSchedulesAdd;
 
         return $this;
     }
