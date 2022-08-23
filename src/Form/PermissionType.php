@@ -2,11 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Hall;
 use App\Entity\Permission;
-use Doctrine\DBAL\Types\BooleanType;
+use App\Repository\HallRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,6 +17,9 @@ class PermissionType extends AbstractType
         $builder
             ->add('isSellDrinks',null, [
                 'label'    => 'Peut-il vendre des boissons ?',
+                'attr' => [
+                    'id' => 'flexSwitchCheckChecked'
+                ]
             ])
             ->add('isMembersWrite', null, [
                 'label'    => 'Peut-il modifier un membre ?',
@@ -35,6 +38,15 @@ class PermissionType extends AbstractType
             ])
             ->add('isPaymentSchedulesAdd', null, [
                 'label'    => 'Peut-il ajouter un échéancié de paiement ?',
+            ])
+            ->add('hall', EntityType::class, [
+                'class' => Hall::class,
+                'query_builder' => function(HallRepository $repository){
+                    return $repository->createQueryBuilder('i')
+                        ->orderBy('i.name', 'ASC');
+                },
+                'choice_label' => 'name',
+                'label' => 'Avec quelle salle souhaité(e) vous faire un lien?'
             ])
         ;
     }

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Apps | Salles{% endblock %}
+
+{% block body %}
+
+    <h1 class="m-5">Gérer les Salles</h1>
+    <div class="container">
+    {% for message in app.flashes('success-salle') %}
+        <div class="alert alert-success mt-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% if not halls.items is same as ([]) %}
+        <div class="row justify-content-between">
+            <p class="col">Il y'a {{ halls.getTotalItemCount }} salles au total</p>
+            <div class="col d-flex justify-content-end">
+                <a class="btn btn-outline-success" href="{{ path('app_salle_ajouter') }}">Ajouter une salle</a>
+            </div>
+        </div>
+        <div class="row justify-content-around">
+            {% for hall in halls %}
+                <div class="card col-5 mt-4">
+                    <h5 class="card-header">{{ hall.id }}</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <div>
+                            <a href="{{ path('app_salle_editer', {id: hall.id}) }}" class="btn btn-primary">Editer</a>
+                            <a href="{{ path('app_salle_supprimer', {id: hall.id}) }}" class="btn btn-danger">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        </div>
+        <div class="navigation d-flex justify-content-center mt-5">
+        {{ knp_pagination_render(halls) }}
+    {% else %}
+        <h2>Il n'y a pas de salle</h2>
+    {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Apps | Modifier une Salle{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <h1 class="m-5">Modifier une salle</h1>
+
+    <div class="container">
+        <div class="row">
+            <p>{{ form_row(form.permissions) }}</p>
+        </div>
+        <div class="col-3 text-center mt-3 form-check form-switch fs-2">{{ form_row(form.isactive) }}</div>
+        <div class="row justify-content-around shadow">
+            <div class="col-5 text-center mt-3">{{ form_row(form.name) }}</div>
+            <div class="col-5 text-center mt-3">{{ form_row(form.streetNumber) }}</div>
+            <div class="col-5 text-center mt-3">{{ form_row(form.adress) }}</div>
+            <div class="col-5 text-center mt-3">{{ form_row(form.city) }}</div>
+            <div class="col-5 text-center mt-3">{{ form_row(form.phone) }}</div>
+            <div class="col-5 text-center mt-3">{{ form_row(form.postalCode) }}</div>
+            <div class="col-11 text-center mt-3">{{ form_row(form.shortDescription) }}</div>
+        </div>
+        <button class="btn btn-outline-warning m-5 align-self-end">Ajouter</button>
+    </div>
+
+    {{ form_end(form) }}
+    {{ dump() }}
+{% endblock %}
