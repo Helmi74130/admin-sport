@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\HallRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -54,13 +52,10 @@ class Hall
     #[ORM\OneToOne(mappedBy: 'hall', cascade: ['persist', 'remove'])]
     private ?Permission $permissions = null;
 
-    /*#[ORM\OneToMany(mappedBy: 'hall', targetEntity: Permission::class, orphanRemoval: true)]
-    private Collection $permissions;
+    #[ORM\ManyToOne(inversedBy: 'hall')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Leader $leader = null;
 
-    public function __construct()
-    {
-        $this->permissions = new ArrayCollection();
-    }*/
 
     public function getId(): ?int
     {
@@ -163,40 +158,6 @@ class Hall
         return $this;
     }
 
-    /*/**
-     * @return Collection<int, Permission>
-     */
-   /* public function getPermissions(): Collection
-    {
-        return $this->permissions;
-    }
-
-    public function addPermission(Permission $permission): self
-    {
-        if (!$this->permissions->contains($permission)) {
-            $this->permissions->add($permission);
-            $permission->setHall($this);
-        }
-
-        return $this;
-    }
-
-    public function removePermission(Permission $permission): self
-    {
-        if ($this->permissions->removeElement($permission)) {
-            // set the owning side to null (unless already changed)
-            if ($permission->getHall() === $this) {
-                $permission->setHall(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->name;
-    }*/
 
    public function getPermissions(): ?Permission
    {
@@ -214,5 +175,25 @@ class Hall
 
        return $this;
    }
+
+   public function getLeader(): ?Leader
+   {
+       return $this->leader;
+   }
+
+   public function setLeader(?Leader $leader): self
+   {
+       $this->leader = $leader;
+
+       return $this;
+   }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+
+
 
 }

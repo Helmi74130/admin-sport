@@ -38,11 +38,6 @@ class Permission
     #[ORM\JoinColumn(nullable: false)]
     private ?Hall $hall = null;
 
-
-   /* #[ORM\ManyToOne(inversedBy: 'permissions')]
-
-    private ?Hall $hall = null;*/
-
     public function getId(): ?int
     {
         return $this->id;
@@ -132,17 +127,6 @@ class Permission
         return $this;
     }
 
-   /* public function getHall(): ?Hall
-    {
-        return $this->hall;
-    }
-
-    public function setHall(?Hall $hall): self
-    {
-        $this->hall = $hall;
-
-        return $this;
-    }*/
 
     public function __toString()
     {

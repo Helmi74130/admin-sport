@@ -11,13 +11,14 @@
             {{ message }}
         </div>
     {% endfor %}
-    {% if not permissions.items is same as ([]) %}
+
         <div class="row justify-content-between">
             <p class="col">Il y'a {{ permissions.getTotalItemCount }} permissions au total</p>
             <div class="col d-flex justify-content-end">
                 <a class="btn btn-outline-success" href="{{ path('app_ajouter') }}">Ajouter une permission</a>
             </div>
         </div>
+    {% if not permissions.items is same as ([]) %}
         <div class="row justify-content-around">
             {% for permission in permissions %}
                 <div class="card col-5 mt-4 p-0 rounded shadow border {{ permission.hall.isactive ? 'border-primary' : 'border-danger' }}">
@@ -86,7 +87,7 @@
     <div class="navigation d-flex justify-content-center mt-5">
         {{ knp_pagination_render(permissions) }}
         {% else %}
-        <h2>Il n'y a pas de permissions pour le moment, cliqué sur le bouton ajouter pour commencer</h2>
+        <h2 class="mt-5">Il n'y a pas de permissions pour le moment, cliqué sur le bouton ajouter pour commencer</h2>
         {% endif %}
     </div>
 

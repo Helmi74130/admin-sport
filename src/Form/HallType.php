@@ -33,42 +33,44 @@ class HallType extends AbstractType
                 ]
             ])
             ->add('streetNumber', IntegerType::class, [
-                'label' => 'N° de rue',
+                'label' => 'N° de rue *',
                 'attr' => [
                     'minlength' => 1,
                     'maxlength' => 10
                 ]
             ])
             ->add('adress', TextareaType::class, [
-                'label'=> 'Adresse'
+                'label'=> 'Adresse *'
             ])
             ->add('city', TextType::class, [
-                'label' => 'Ville',
+                'label' => 'Ville *',
                 'attr' => [
                     'minlength' => '2',
                     'maxlength' => '150'
                 ]
             ])
             ->add('isactive', null, [
-                'label' => 'En activitée'
+                'label' => 'En activitée *'
             ])
             ->add('phone', TextType::class, [
-                'label' => 'Téléphone',
+                'label' => 'Téléphone *',
                 'attr' => [
                     'minlength' => '5',
                     'maxlength' => '12'
                 ]
             ])
             ->add('postalCode', TextType::class, [
-                'label' => 'Code postale',
+                'label' => 'Code postale *',
                 'attr' => [
                     'minlength' => '5',
                     'maxlength' => '6'
                 ]
             ])
-            ->add('permissions',null, [
-                'mapped' => false,
+            ->add('leader',null, [
+                'mapped' => true,
+                'label' => 'Avec quelle gérant souhaité(e) vous faire un lien?'
             ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

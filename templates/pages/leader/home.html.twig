@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Apps | Gérants{% endblock %}
+
+{% block body %}
+
+    <h1 class="m-5">Gérer les gérants</h1>
+    <div class="container">
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mt-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% if not leaders.items is same as ([]) %}
+        <div class="row justify-content-between">
+            <p class="col">Il y'a {{ leaders.getTotalItemCount }} gérants au total</p>
+            <div class="col d-flex justify-content-end">
+                <a class="btn btn-outline-success" href="{{ path('app_ajouter_leader') }}">Ajouter un Gérant</a>
+            </div>
+        </div>
+        <div class="row justify-content-around">
+            {% for leader in leaders %}
+                <div class="card col-5 mt-4 p-0 rounded shadow border {{ leader.isActive ? 'border-primary' : 'border-danger' }}">
+                    <div class="card-header d-flex justify-content-between">
+                        <h5 class=" mt-2 lh-lg {{ leader.isActive ? 'text-primary' : 'text-danger' }}">{{ leader.name }} {{ leader.firstname}} <br>  </h5>
+                        <div class="form-check disabled">
+                            <label class="form-check-label" for="flexCheckChecked">En activité</label>
+                            <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ leader.isActive ? 'checked=""' : '' }}>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                            <h5 class="card-title fs-3 border-bottom">Id: {{ leader.id }}</h5>
+                            <div class="card-text mt-2">
+                                <div class="row">
+                                    <p class="col-4 text-primary">E-mail:</p>
+                                    <p class="col">{{ leader.mail }}</p>
+                                </div>
+                                <div class="row">
+                                    <p class="col-4 text-primary">Ville</p>
+                                    <p class="col">{{ leader.city }}</p>
+                                </div>
+                                <div class="row">
+                                    <p class="col-4 text-primary">Tél:</p>
+                                    <p class="col">{{ leader.phone }}</p>
+                                </div>
+                                <div class="row">
+                                    <p class="col-4 text-primary">Tél. commercial: </p>
+                                    <p class="col">{{ leader.commercialPhone }}</p>
+                                </div>
+                            </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ leader.id }}">Editer</a>
+                            <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ leader.id }}">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        </div>
+        <div class="navigation d-flex justify-content-center mt-5">
+        {{ knp_pagination_render(leaders) }}
+    {% else %}
+        <h2 class="mt-5">Il n'y a pas de Gérants pour le moment, cliqué sur le bouton ajouter pour commencer</h2>
+    {% endif %}
+    </div>
+
+    {% for leader in leaders %}
+        <!-- Modal delete-->
+        <div class="modal fade" id="deleteModal{{ leader.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Voulez-vous supprimer le gérant {{ leader.name }} {{ leader.firstname }}?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <p>Attention toutes suppressions est définitive!</p>
+                        <p>En supprimant un gérant vous acceptez de supprimer les salles associès ainsi que les permissions</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <a href="{{ path('app_supprimer_leader', {id: leader.id}) }}" type="button" class="btn btn-danger">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal edit-->
+        <div class="modal fade" id="editModal{{ leader.id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Voulez-vous modifier le gérant {{ leader.name }} {{ leader.firstname }}?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-warning">
+                        <p>Attention toutes modifications est définitive!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <a href=" {{ path('app_leader_editer', {id: leader.id}) }}" type="button" class="btn btn-warning">Modifier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {{ dump() }}
+{% endblock %}

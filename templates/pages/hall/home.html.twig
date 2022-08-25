@@ -22,15 +22,18 @@
                     {% for hall in halls %}
                         <div class="card col-5 mt-4 p-0 rounded shadow border {{ hall.isactive ? 'border-primary' : 'border-danger' }}">
                             <div class="card-header d-flex justify-content-between">
-                                <h5 class="{{ hall.isactive ? 'text-primary' : 'text-danger' }} mt-2 fs-2">Salle: {{ hall.name }} </h5>
+                                <div class="{{ hall.isactive ? 'text-primary' : 'text-danger' }} mt-2 fs-2">
+                                    <p class="text-center">Salle: {{ hall.name }} </p>
+                                </div>
                                 <div class="form-check disabled">
                                     <label class="form-check-label" for="flexCheckChecked">En activité</label>
                                     <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.isactive ? 'checked=""' : '' }} >
+                                    <p class="fs-5">Id: {{ hall.id }}</p>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title fs-3 border-bottom">Id: {{ hall.id }}</h5>
-                                    <div class="card-text mt-2">
+                                <h5 class="card-title fs-4 text-center"> Gérant: Mr {{ hall.leader.name}} {{ hall.leader.firstname}}</h5>
+                                    <div class="card-text mt-2 pt-3 border-top">
                                         <div class="row">
                                             <p class="col-4 text-primary">N° de rue:</p>
                                             <p class="col">{{ hall.streetNumber }}</p>
@@ -55,11 +58,11 @@
                                             <p class="col-12 text-primary">Déscription:</p>
                                             <p class="col12">{{ hall.shortDescription }}</p>
                                         </div>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ hall.id }}">Editer</a>
-                                    <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hall.id }}">Supprimer</a>
-                                </div>
+                                    </div>
+                            </div>
+                            <div class="d-flex justify-content-end mb-3 me-3">
+                                <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ hall.id }}">Editer</a>
+                                <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hall.id }}">Supprimer</a>
                             </div>
                         </div>
                     {% endfor %}
@@ -112,6 +115,8 @@
                 </div>
             </div>
         </div>
+
+        {{ dump() }}
     {% endfor %}
 
 
