@@ -16,7 +16,7 @@ class AppFixtures extends Fixture
         $faker = Faker\Factory::create('fr_FR');
 
         // Permissions
-        $permissions = [];
+       /* $permissions = [];
         for ($i=0; $i <=50; $i++){
             $permission = new Permission();
 
@@ -31,7 +31,7 @@ class AppFixtures extends Fixture
             $permissions[] = $permission;
 
             $manager->persist($permission);
-        }
+        }*/
 
         // Halls
         for ($j=0; $j <50; $j++){
@@ -46,9 +46,9 @@ class AppFixtures extends Fixture
             $hall->setPostalCode($faker->postcode);
             $hall->setShortDescription($faker->sentence($nbWords = 15, $variableNbWords = true));
 
-            for($k = 0; $k < mt_rand(1,3); $k++){
+            /*for($k = 0; $k < mt_rand(1,2); $k++){
                 $hall->addPermission($permissions[mt_rand(0, count($permissions) - 1)]);
-            }
+            }*/
             $manager->persist($hall);
         }
 

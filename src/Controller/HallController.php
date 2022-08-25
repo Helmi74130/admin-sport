@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Hall;
-use App\Entity\Permission;
 use App\Form\HallType;
-use App\Form\PermissionType;
+use App\Repository\HallRepository;
 use App\Repository\PermissionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,18 +17,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class HallController extends AbstractController
 {
     #[Route('/salle', name: 'app_hall', methods: ['GET'])]
-    public function index(PermissionRepository $permissionRepository, PaginatorInterface $paginator, Request $request): Response
+    public function index(PaginatorInterface $paginator, Request $request, HallRepository $hallRepository): Response
     {
         /**
          * This controller display all halls
-         * @param PermissionRepository $permissionRepository
+         * @param HallRepository $hallRepository
          * @param PaginatorInterface $paginator
          * @param Request $request
          * @return Response
          */
 
         $halls = $paginator->paginate(
-            $permissionRepository->findAll(),
+            $hallRepository->findAll(),
             $request->query->getInt('page', 1),
             6
         );
@@ -75,7 +75,7 @@ class HallController extends AbstractController
      * This controller edit a permission
      * @param EntityManagerInterface $manager
      * @param Request $request
-     * @param Permission $permission
+     * @param Hall $hall
      * @return Response
      */
 
@@ -113,13 +113,14 @@ class HallController extends AbstractController
      */
 
     #[Route('/salle/supprimer/{id}', name: 'app_salle_supprimer', methods: ['GET'])]
-    public function delete(EntityManagerInterface $manager, Hall $hall):Response
+    public function delete( EntityManagerInterface $manager, Hall $hall):Response
     {
+
         $manager->remove($hall);
         $manager->flush();
 
         $this->addFlash(
-            'success',
+            'success-salle',
             'Votre salle a été supprimée avec succès !'
         );
 

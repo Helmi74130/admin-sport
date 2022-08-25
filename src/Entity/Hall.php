@@ -51,13 +51,16 @@ class Hall
     #[Assert\NotBlank()]
     private ?string $postalCode = null;
 
-    #[ORM\OneToMany(mappedBy: 'hall', targetEntity: Permission::class)]
+    #[ORM\OneToOne(mappedBy: 'hall', cascade: ['persist', 'remove'])]
+    private ?Permission $permissions = null;
+
+    /*#[ORM\OneToMany(mappedBy: 'hall', targetEntity: Permission::class, orphanRemoval: true)]
     private Collection $permissions;
 
     public function __construct()
     {
         $this->permissions = new ArrayCollection();
-    }
+    }*/
 
     public function getId(): ?int
     {
@@ -160,10 +163,10 @@ class Hall
         return $this;
     }
 
-    /**
+    /*/**
      * @return Collection<int, Permission>
      */
-    public function getPermissions(): Collection
+   /* public function getPermissions(): Collection
     {
         return $this->permissions;
     }
@@ -193,6 +196,23 @@ class Hall
     public function __toString()
     {
         return $this->name;
-    }
+    }*/
+
+   public function getPermissions(): ?Permission
+   {
+       return $this->permissions;
+   }
+
+   public function setPermissions(Permission $permissions): self
+   {
+       // set the owning side of the relation if necessary
+       if ($permissions->getHall() !== $this) {
+           $permissions->setHall($this);
+       }
+
+       $this->permissions = $permissions;
+
+       return $this;
+   }
 
 }

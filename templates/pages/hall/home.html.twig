@@ -5,39 +5,116 @@
 {% block body %}
 
     <h1 class="m-5">Gérer les Salles</h1>
-    <div class="container">
-    {% for message in app.flashes('success-salle') %}
-        <div class="alert alert-success mt-4">
-            {{ message }}
-        </div>
-    {% endfor %}
-    {% if not halls.items is same as ([]) %}
-        <div class="row justify-content-between">
-            <p class="col">Il y'a {{ halls.getTotalItemCount }} salles au total</p>
-            <div class="col d-flex justify-content-end">
-                <a class="btn btn-outline-success" href="{{ path('app_salle_ajouter') }}">Ajouter une salle</a>
-            </div>
-        </div>
-        <div class="row justify-content-around">
-            {% for hall in halls %}
-                <div class="card col-5 mt-4">
-                    <h5 class="card-header">{{ hall.id }}</h5>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <div>
-                            <a href="{{ path('app_salle_editer', {id: hall.id}) }}" class="btn btn-primary">Editer</a>
-                            <a href="{{ path('app_salle_supprimer', {id: hall.id}) }}" class="btn btn-danger">Supprimer</a>
-                        </div>
-                    </div>
+        <div class="container">
+            {% for message in app.flashes('success-salle') %}
+                <div class="alert alert-success mt-4">
+                    {{ message }}
                 </div>
             {% endfor %}
-        </div>
-        </div>
+            {% if not halls.items is same as ([]) %}
+                <div class="row justify-content-between">
+                    <p class="col">Il y'a {{ halls.getTotalItemCount }} salles au total</p>
+                    <div class="col d-flex justify-content-end">
+                        <a class="btn btn-outline-success" href="{{ path('app_salle_ajouter') }}">Ajouter une salle</a>
+                    </div>
+                </div>
+                <div class="row justify-content-around">
+                    {% for hall in halls %}
+                        <div class="card col-5 mt-4 p-0 rounded shadow border {{ hall.isactive ? 'border-primary' : 'border-danger' }}">
+                            <div class="card-header d-flex justify-content-between">
+                                <h5 class="{{ hall.isactive ? 'text-primary' : 'text-danger' }} mt-2 fs-2">Salle: {{ hall.name }} </h5>
+                                <div class="form-check disabled">
+                                    <label class="form-check-label" for="flexCheckChecked">En activité</label>
+                                    <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.isactive ? 'checked=""' : '' }} >
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title fs-3 border-bottom">Id: {{ hall.id }}</h5>
+                                    <div class="card-text mt-2">
+                                        <div class="row">
+                                            <p class="col-4 text-primary">N° de rue:</p>
+                                            <p class="col">{{ hall.streetNumber }}</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="col-4 text-primary">Adresse: </p>
+                                            <p class="col">{{ hall.adress }}</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="col-4 text-primary">Code Postale:</p>
+                                            <p class="col">{{ hall.postalCode }}</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="col-4 text-primary">Ville: </p>
+                                            <p class="col">{{ hall.city }}</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="col-4 text-primary">Téléphone:</p>
+                                            <p class="col">{{ hall.phone }}</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="col-12 text-primary">Déscription:</p>
+                                            <p class="col12">{{ hall.shortDescription }}</p>
+                                        </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ hall.id }}">Editer</a>
+                                    <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hall.id }}">Supprimer</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                </div>
         <div class="navigation d-flex justify-content-center mt-5">
-        {{ knp_pagination_render(halls) }}
-    {% else %}
-        <h2>Il n'y a pas de salle</h2>
-    {% endif %}
-    </div>
+            {{ knp_pagination_render(halls) }}
+            {% else %}
+            <h1>Il n'y a pas de salles actuellements, cliquer sur le bouton ajouter pour commencer</h1>
+            {% endif %}
+        </div>
+
+
+    {% for hall in halls %}
+        <!-- Modal delete-->
+        <div class="modal fade" id="deleteModal{{ hall.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Voulez-vous supprimer la salle: {{ hall.name }}?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Attention toutes modifications est définitive!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <a href="{{ path('app_salle_supprimer', {id: hall.id}) }}" type="button" class="btn btn-danger">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal edit-->
+        <div class="modal fade" id="editModal{{ hall.id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Voulez-vous modifier la salle: {{ hall.name }}?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Attention toutes modifications est définitive!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <a href=" {{ path('app_salle_editer', {id: hall.id}) }}" type="button" class="btn btn-warning">Modifier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+
 {% endblock %}
+
+

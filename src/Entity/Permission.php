@@ -34,8 +34,14 @@ class Permission
     #[ORM\Column]
     private ?bool $isPaymentSchedulesAdd = null;
 
-    #[ORM\ManyToOne(inversedBy: 'permissions')]
+    #[ORM\OneToOne(inversedBy: 'permissions', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Hall $hall = null;
+
+
+   /* #[ORM\ManyToOne(inversedBy: 'permissions')]
+
+    private ?Hall $hall = null;*/
 
     public function getId(): ?int
     {
@@ -126,7 +132,7 @@ class Permission
         return $this;
     }
 
-    public function getHall(): ?Hall
+   /* public function getHall(): ?Hall
     {
         return $this->hall;
     }
@@ -136,10 +142,24 @@ class Permission
         $this->hall = $hall;
 
         return $this;
-    }
+    }*/
 
     public function __toString()
     {
         return $this->id;
     }
+
+    public function getHall(): ?Hall
+    {
+        return $this->hall;
+    }
+
+    public function setHall(Hall $hall): self
+    {
+        $this->hall = $hall;
+
+        return $this;
+    }
+
+
 }

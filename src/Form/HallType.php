@@ -66,9 +66,9 @@ class HallType extends AbstractType
                     'maxlength' => '6'
                 ]
             ])
-            ->add('permissions')
-
-        ;
+            ->add('permissions',null, [
+                'mapped' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
