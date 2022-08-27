@@ -72,6 +72,9 @@
             {{ knp_pagination_render(halls) }}
             {% else %}
             <h1>Il n'y a pas de salles actuellements, cliquer sur le bouton ajouter pour commencer!</h1>
+                <div class="col d-flex justify-content-end">
+                    <a class="btn btn-outline-success" href="{{ path('app_salle_ajouter') }}">Ajouter une salle</a>
+                </div>
             {% endif %}
         </div>
 

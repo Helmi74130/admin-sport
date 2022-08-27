@@ -6,6 +6,8 @@ use App\Repository\LeaderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: LeaderRepository::class)]
 class Leader
@@ -16,21 +18,32 @@ class Leader
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min:2, max:50)]
     private ?string $name = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min:2, max:50)]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\Email()]
+    #[Assert\Length(min:2, max:50)]
     private ?string $mail = null;
 
     #[ORM\Column(length: 80)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min:2, max:80)]
     private ?string $city = null;
 
     #[ORM\Column(length: 15)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min:10, max:15)]
     private ?string $phone = null;
 
     #[ORM\Column(length: 15, nullable: true)]
+    #[Assert\Length(min:10, max:15)]
     private ?string $commercialPhone = null;
 
     #[ORM\Column]

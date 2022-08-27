@@ -5,20 +5,22 @@ namespace App\DataFixtures;
 use App\Entity\Hall;
 use App\Entity\Leader;
 use App\Entity\Permission;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker;
 
+
 class AppFixtures extends Fixture
 {
+
     public function load(ObjectManager $manager): void
     {
-
         $faker = Faker\Factory::create('fr_FR');
 
-        /*// Permissions
-        $permissions = [];
-        for ($i=0; $i <=50; $i++){
+
+        // Permissions
+        /*for ($i=0; $i <10; $i++){
             $permission = new Permission();
 
             $permission->setIsMembersAdd(rand(0,1));
@@ -29,10 +31,11 @@ class AppFixtures extends Fixture
             $permission->setIsSellDrinks(rand(0,1));
             $permission->setIsPaymentSchedulesWrite(rand(0,1));
 
-            $permissions[] = $permission;
 
             $manager->persist($permission);
-        }*/
+
+
+        }
 
         // Halls
         $halls =[];
@@ -49,13 +52,14 @@ class AppFixtures extends Fixture
             $hall->setPostalCode($faker->postcode);
             $hall->setShortDescription($faker->sentence($nbWords = 15, $variableNbWords = true));
 
-            $halls[] = $hall;
+                $halls[] = $hall;
 
-            /*for($i = 0; $i < mt_rand(1,5) ; $i++){
-                $hall->setPermissions($permissions[mt_rand(0, count($permissions) - 1)]);
-            }*/
-            $manager->persist($hall);
-        }
+                $manager->persist($hall);
+        }*/
+
+
+
+
         //leader
         for ($u=0; $u < 15; $u++){
             $leader = new Leader();
@@ -68,18 +72,25 @@ class AppFixtures extends Fixture
                 ->setCommercialPhone($faker->e164PhoneNumber)
                 ->setIsActive(rand(0,1));
 
-                for($k = 0; $k < mt_rand(1,15); $k++){
+                /*for($k = 0; $k < mt_rand(1,15); $k++){
                     $leader->addHall($halls[mt_rand(0, count($halls) - 1)]);
-                }
+                }*/
 
 
                 $manager->persist($leader);
         }
 
+        for($a=0; $a < 10; $a++){
+            $user= new User();
 
+            $user->setFirstname($faker->lastName)
+                ->setName($faker->lastName)
+                ->setEmail($faker->email)
+                ->setRoles(['ROLE_USER'])
+                ->setPassword('password');
 
-
-
+            $manager->persist($user);
+        }
 
 
         $manager->flush();
