@@ -3,9 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Hall;
+use App\Entity\Leader;
+use App\Entity\Permission;
 use App\Form\HallType;
+use App\Form\PermissionType;
 use App\Repository\HallRepository;
+use App\Repository\LeaderRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,8 +56,8 @@ class HallController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()){
-            $hall = $form->getData();
 
+            $hall = $form->getData();
             $manager->persist($hall);
             $manager->flush();
 
@@ -61,16 +66,17 @@ class HallController extends AbstractController
                 'Votre salle a été ajoutée avec succès !'
             );
 
-            return $this->redirectToRoute('app_hall');
+            return $this->redirectToRoute('app_ajouter');
+           // return $this->redirectToRoute('app_hall');
 
         }
         return $this->render('pages/hall/add.html.twig', [
-            'form'=> $form->createView()
+            'form'=> $form->createView(),
         ]);
     }
 
     /**
-     * This controller edit a permission
+     * This controller edit a hall
      * @param EntityManagerInterface $manager
      * @param Request $request
      * @param Hall $hall
@@ -94,7 +100,7 @@ class HallController extends AbstractController
                 'Votre salle a été modifiée avec succès !'
             );
 
-            return $this->redirectToRoute('app_hall');
+            return $this->redirectToRoute('app_leader');
 
         }
 

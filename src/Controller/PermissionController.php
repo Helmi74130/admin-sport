@@ -62,7 +62,7 @@ class PermissionController extends AbstractController
                 'Votre permission a été ajoutée avec succès !'
             );
 
-            return $this->redirectToRoute('app_permission');
+            return $this->redirectToRoute('app_leader');
 
         }
         return $this->render('pages/permission/add.html.twig', [
@@ -95,33 +95,13 @@ class PermissionController extends AbstractController
                 'Votre permission a été modifiée avec succès !'
             );
 
-            return $this->redirectToRoute('app_permission');
+            return $this->redirectToRoute('app_leader');
 
         }
 
-        return $this->render('pages/permission/add.html.twig', [
+        return $this->render('pages/permission/edit.html.twig', [
             'form'=> $form->createView()
         ]);
     }
 
-    /**
-     * This controller delete a permission
-     * @param EntityManagerInterface $manager
-     * @param Permission $permission
-     * @return Response
-     */
-
-    #[Route('/permission/supprimer/{id}', name: 'app_supprimer', methods: ['GET'])]
-    public function delete(EntityManagerInterface $manager, Permission $permission):Response
-    {
-        $manager->remove($permission);
-        $manager->flush();
-
-        $this->addFlash(
-            'success',
-            'Votre permission a été supprimée avec succès !'
-        );
-
-        return $this->redirectToRoute('app_permission');
-    }
 }

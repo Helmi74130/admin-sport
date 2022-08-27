@@ -2,15 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Hall;
 use App\Entity\Leader;
+use App\Entity\Permission;
 use App\Form\LeaderType;
+use App\Repository\HallRepository;
 use App\Repository\LeaderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+//use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry;
 
 class LeaderController extends AbstractController
 {
@@ -33,6 +38,51 @@ class LeaderController extends AbstractController
 
         return $this->render('pages/leader/home.html.twig', [
             'leaders' => $leaders
+        ]);
+    }
+
+
+    #[Route('/gerants/appercu/{id}', name: 'app_leader_view', methods: ['GET'])]
+    public function view( ManagerRegistry $doctrine, int $id, Leader $leader): Response
+    {
+        /**
+         * This controller display all leaders
+         * @param LeaderRepository $leaderRepository
+         * @param PaginatorInterface $paginator
+         * @param Request $request
+         * @return Response
+         */
+
+        $leaders = $doctrine->getRepository(Leader::class)->find($id);
+
+        $halls = $leader->getHall();
+
+        return $this->render('pages/leader/view.html.twig', [
+            'leaders'=> $leaders,
+            'halls' => $halls,
+        ]);
+    }
+
+    #[Route('/gerants/salle/{id}', name: 'app_leader_view_salle', methods: ['GET'])]
+    public function salle( ManagerRegistry $doctrine, int $id, Permission $leader): Response
+    {
+        /**
+         * This controller display all leaders
+         * @param LeaderRepository $leaderRepository
+         * @param PaginatorInterface $paginator
+         * @param Request $request
+         * @return Response
+         */
+
+        $leaders = $doctrine->getRepository(Hall::class)->find($id);
+
+        $halls = $leader->getHall();
+
+
+
+        return $this->render('pages/leader/viewperm.html.twig', [
+            'leaders'=> $leaders,
+            'halls' => $halls,
         ]);
     }
 
@@ -69,6 +119,7 @@ class LeaderController extends AbstractController
             'form'=> $form->createView()
         ]);
     }
+
 
     /**
      * This controller edit a leader

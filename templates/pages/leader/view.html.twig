@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Salles de {{ leaders.name }} {{ leaders.firstname }}{% endblock %}
+
+{% block body %}
+    {{ dump() }}
+    <h1 class="m-5">Salles de {{ leaders.name }} {{ leaders.firstname }}</h1>
+    <div class="container">
+    {% for message in app.flashes('success-salle') %}
+        <div class="alert alert-success mt-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+            <div class="col d-flex justify-content-end">
+                <a class="btn btn-outline-success"  href="{{ path('app_salle_ajouter') }}">Ajouter une salle à {{ leaders.name }} {{ leaders.firstname }}</a>
+            </div>
+        </div>
+        <div class="row justify-content-around">
+            {% for hall in halls %}
+                <div class="card col-10 mt-4 p-0 rounded shadow border {{ hall.isactive ? 'border-primary' : 'border-danger' }}">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="{{ hall.isactive ? 'text-primary' : 'text-danger' }} mt-2 fs-2">
+                            <p class="text-center">Salle: {{ hall.name }} </p>
+                        </div>
+                        <div class="form-check disabled">
+                            <label class="form-check-label" for="flexCheckChecked">En activité</label>
+                            <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.isactive ? 'checked=""' : '' }} >
+                            <p class="fs-5">Id: {{ hall.id }}</p>
+                        </div>
+                    </div>
+                    <h5 class="card-title fs-4 text-center mt-3"> Gérant: Mr {{ hall.leader.name}} {{ hall.leader.firstname}}</h5>
+                    <div class="row justify-content-center">
+                        <div class="col-5">
+                            <div class="row">
+                                <p class="col-4 text-primary">N° de rue:</p>
+                                <p class="col">{{ hall.streetNumber }}</p>
+                            </div>
+                            <div class="row">
+                                <p class="col-4 text-primary">Adresse: </p>
+                                <p class="col">{{ hall.adress }}</p>
+                            </div>
+                            <div class="row">
+                                <p class="col-4 text-primary">Code Postale:</p>
+                                <p class="col">{{ hall.postalCode }}</p>
+                            </div>
+                            <div class="row">
+                                <p class="col-4 text-primary">Ville: </p>
+                                <p class="col">{{ hall.city }}</p>
+                            </div>
+                            <div class="row">
+                                <p class="col-4 text-primary">Téléphone:</p>
+                                <p class="col">{{ hall.phone }}</p>
+                            </div>
+                            <div class="row">
+                                <p class="col-12 text-primary">Déscription:</p>
+                                <p class="col12">{{ hall.shortDescription }}</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card-text mt-3 row justify-content-end">
+                                <div class="col-10 mt-2">
+                                    <div class="form-check disabled">
+                                        <label class="form-check-label" for="flexCheckChecked">Vendre des boissons</label>
+                                        <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{  hall.permissions.isSellDrinks  ? 'checked=""' : '' }} >
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-2">
+                                    <div class="form-check disabled">
+                                        <label class="form-check-label" for="flexCheckChecked">Modifier le statut d'un membre</label>
+                                        <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isMembersWrite ? 'checked=""' : '' }} >
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-2">
+                                    <div class="form-check disabled">
+                                        <label class="form-check-label" for="flexCheckChecked">Accès au statut d'un membre</label>
+                                        <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isMembersRead ? 'checked=""' : '' }} >
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-2">
+                                    <div class="form-check disabled">
+                                        <label class="form-check-label" for="flexCheckChecked">Ajouter un membre</label>
+                                        <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isMembersAdd ? 'checked=""' : '' }} >
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-2">
+                                    <div class="form-check disabled">
+                                        <label class="form-check-label" for="flexCheckChecked">Voir les statistiques d'un membre</label>
+                                        <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isMembersStatistiqueRead ? 'checked=""' : '' }} >
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-2">
+                                    <div class="form-check disabled">
+                                        <label class="form-check-label" for="flexCheckChecked">Modifier les échéanciés de paiement </label>
+                                        <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isPaymentSchedulesWrite ? 'checked=""' : '' }} >
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-2">
+                                    <div class="form-check disabled">
+                                        <label class="form-check-label" for="flexCheckChecked">Accès aux échéanciés de paiement </label>
+                                        <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isPaymentSchedulesAdd ? 'checked=""' : '' }} >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mb-3 me-3 mt-3">
+                        <a href="{{ path('app_salle_editer', {id: hall.id}) }}" type="button" class="btn btn-outline-primary rounded btn-sm me-4" >Editer la salle</a>
+                        <a href=" {{ path('app_editer', {id: hall.permissions.id}) }}" type="button" class="btn btn-outline-info rounded btn-sm me-4">Editer les permissions</a>
+                        <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hall.id }}">Supprimer la salle</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+
+
+    {% for hall in halls %}
+        <!-- Modal delete-->
+        <div class="modal fade" id="deleteModal{{ hall.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Voulez-vous supprimer la salle: {{ hall.name }}?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <p>Attention toutes suppressions est définitive!</p>
+                        <p>En supprimant une salle vous acceptez de supprimer la permission associé!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <a href="{{ path('app_salle_supprimer', {id: hall.id}) }}" type="button" class="btn btn-danger">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    {% endfor %}
+
+
+{% endblock %}

@@ -14,9 +14,6 @@
 
         <div class="row justify-content-between">
             <p class="col">Il y'a {{ permissions.getTotalItemCount }} permissions au total</p>
-            <div class="col d-flex justify-content-end">
-                <a class="btn btn-outline-success" href="{{ path('app_ajouter') }}">Ajouter une permission</a>
-            </div>
         </div>
     {% if not permissions.items is same as ([]) %}
         <div class="row justify-content-around">
@@ -77,7 +74,6 @@
                         </div>
                         <div class="d-flex justify-content-end mt-3">
                             <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ permission.id }}">Editer</a>
-                            <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ permission.id }}">Supprimer</a>
                         </div>
                     </div>
                 </div>
@@ -92,25 +88,6 @@
     </div>
 
     {% for permission in permissions %}
-        <!-- Modal delete-->
-        <div class="modal fade" id="deleteModal{{ permission.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Voulez-vous supprimer le permissions pour la sallle {{ permission.hall.name }}?</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Attention toutes modifications est définitive!</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                        <a href="{{ path('app_supprimer', {id: permission.id}) }}" type="button" class="btn btn-danger">Supprimer</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
         <!-- Modal edit-->
         <div class="modal fade" id="editModal{{ permission.id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ItemsController!{% endblock %}
+
+{% block body %}
+    {{ dump() }}
+
+    <div class="row justify-content-between">
+        <p class="col">Il y a {{ leaders.getTotalItemCount }} items au total</p>
+    </div>
+    <div class="container">
+        <div class="row justify-content-around">
+            <div class="col-12">
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="table-primary text-center">
+                        <th scope="col">Id</th>
+                        <th scope="col">Nom et prénom</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Ville</th>
+                        <th scope="col">Téléphone</th>
+                        <th scope="col">Tél.Com</th>
+                        <th scope="col">Active</th>
+                    </tr>
+                    </thead>
+                    {% for leader in leaders %}
+                        <tbody class="text-center">
+
+                            <tr class="{{ (leader.isActive) ? 'table-light' : 'table-warning' }}">
+                                <td>{{ leader.id }}</td>
+                                <td>{{ leader.name }} {{ leader.firstname }}</td>
+                                <td>{{ leader.mail }}</td>
+                                <td>{{ leader.city }}</td>
+                                <td>{{ leader.phone }}</td>
+                                {% if (leader.commercialPhone != null) %}
+                                    <td>{{ leader.commercialPhone }}</td>
+                                {% else %}
+                                    <td>-</td>
+                                {% endif %}
+                                <td>{{ (leader.isActive) ? 'Oui' : 'Non' }}</td>
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+<div class="navigation d-flex justify-content-center mt-5">
+    {{ knp_pagination_render(leaders) }}
+    <h2 class="mt-5">Il n'y a rien dans la liste actuellement pour commencer ajouter des gérants</h2>
+    <a class="btn btn-outline-success" href="{{ path('app_ajouter') }}">Ajouter un gérant</a>
+</div>
+
+
+{% endblock %}

@@ -61,7 +61,7 @@
                                     </div>
                             </div>
                             <div class="d-flex justify-content-end mb-3 me-3">
-                                <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ hall.id }}">Editer</a>
+                                <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" href=" {{ path('app_salle_editer', {id: hall.id}) }}">Editer</a>
                                 <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hall.id }}">Supprimer</a>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
         <div class="navigation d-flex justify-content-center mt-5">
             {{ knp_pagination_render(halls) }}
             {% else %}
-            <h1>Il n'y a pas de salles actuellements, cliquer sur le bouton ajouter pour commencer</h1>
+            <h1>Il n'y a pas de salles actuellements, cliquer sur le bouton ajouter pour commencer!</h1>
             {% endif %}
         </div>
 
@@ -85,32 +85,13 @@
                         <h5 class="modal-title" id="deleteModalLabel">Voulez-vous supprimer la salle: {{ hall.name }}?</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-danger">
                         <p>Attention toutes modifications est définitive!</p>
+                        <p>En supprimant la salle vous acceptez de supprimer la permission associé!</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
                         <a href="{{ path('app_salle_supprimer', {id: hall.id}) }}" type="button" class="btn btn-danger">Supprimer</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Modal edit-->
-        <div class="modal fade" id="editModal{{ hall.id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Voulez-vous modifier la salle: {{ hall.name }}?</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Attention toutes modifications est définitive!</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                        <a href=" {{ path('app_salle_editer', {id: hall.id}) }}" type="button" class="btn btn-warning">Modifier</a>
                     </div>
                 </div>
             </div>

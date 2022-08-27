@@ -16,48 +16,8 @@ class AppFixtures extends Fixture
 
         $faker = Faker\Factory::create('fr_FR');
 
-        // Halls
-        $halls =[];
-        for ($j=0; $j <50; $j++){
-            $hall = new Hall();
-
-            $hall->setName($faker->lastName);
-            $hall->setStreetNumber($faker->numberBetween($min = 1, $max = 200));
-            $hall->setAdress($faker->address);
-            $hall->setCity($faker->city);
-            $hall->setIsactive(rand(0,1));
-            $hall->setPhone($faker->e164PhoneNumber);
-            $hall->setPostalCode($faker->postcode);
-            $hall->setShortDescription($faker->sentence($nbWords = 15, $variableNbWords = true));
-
-            $halls[] = $hall;
-            /*for($k = 0; $k < mt_rand(1,2); $k++){
-                $hall->addPermission($permissions[mt_rand(0, count($permissions) - 1)]);
-            }*/
-            $manager->persist($hall);
-        }
-        //leader
-        for ($u=0; $u < 25; $u++){
-            $leader = new Leader();
-
-            $leader->setName($faker->lastName)
-                ->setFirstname($faker->lastName)
-                ->setCity($faker->city)
-                ->setMail($faker->email)
-                ->setPhone($faker->e164PhoneNumber)
-                ->setCommercialPhone($faker->e164PhoneNumber)
-                ->setIsActive(rand(0,1));
-
-                for($k = 0; $k < mt_rand(5,15); $k++){
-                    $leader->addHall($halls[mt_rand(0, count($halls) - 1)]);
-                }
-
-                $manager->persist($leader);
-        }
-
-
-        // Permissions
-       /* $permissions = [];
+        /*// Permissions
+        $permissions = [];
         for ($i=0; $i <=50; $i++){
             $permission = new Permission();
 
@@ -73,6 +33,53 @@ class AppFixtures extends Fixture
 
             $manager->persist($permission);
         }*/
+
+        // Halls
+        $halls =[];
+        for ($j=0; $j <10; $j++){
+
+            $hall = new Hall();
+
+            $hall->setName($faker->lastName);
+            $hall->setStreetNumber($faker->numberBetween($min = 1, $max = 200));
+            $hall->setAdress($faker->address);
+            $hall->setCity($faker->city);
+            $hall->setIsactive(rand(0,1));
+            $hall->setPhone($faker->e164PhoneNumber);
+            $hall->setPostalCode($faker->postcode);
+            $hall->setShortDescription($faker->sentence($nbWords = 15, $variableNbWords = true));
+
+            $halls[] = $hall;
+
+            /*for($i = 0; $i < mt_rand(1,5) ; $i++){
+                $hall->setPermissions($permissions[mt_rand(0, count($permissions) - 1)]);
+            }*/
+            $manager->persist($hall);
+        }
+        //leader
+        for ($u=0; $u < 15; $u++){
+            $leader = new Leader();
+
+            $leader->setName($faker->lastName)
+                ->setFirstname($faker->lastName)
+                ->setCity($faker->city)
+                ->setMail($faker->email)
+                ->setPhone($faker->e164PhoneNumber)
+                ->setCommercialPhone($faker->e164PhoneNumber)
+                ->setIsActive(rand(0,1));
+
+                for($k = 0; $k < mt_rand(1,15); $k++){
+                    $leader->addHall($halls[mt_rand(0, count($halls) - 1)]);
+                }
+
+
+                $manager->persist($leader);
+        }
+
+
+
+
+
 
 
         $manager->flush();
