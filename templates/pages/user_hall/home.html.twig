@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Apps | Mes Salles{% endblock %}
+
+{% block body %}
+
+    <h1 class="m-5">Mes Salles</h1>
+
+    <main class="container">
+        {% if not halls.items is same as ([]) %}
+                <p class="col">Vous avez {{ halls.getTotalItemCount }} salle(s) au total</p>
+            <div class="row justify-content-around">
+                {% for hall in halls %}
+                    <div class="card col-5 mt-4 p-0 rounded shadow border {{ hall.isactive ? 'border-primary' : 'border-danger' }}">
+                        <div class="card-header d-flex justify-content-between">
+                            <div class="{{ hall.isactive ? 'text-primary' : 'text-danger' }} mt-2 fs-2">
+                                <p class="text-center">Salle: {{ hall.name }} </p>
+                            </div>
+                            <div class="form-check disabled">
+                                <label class="form-check-label" for="flexCheckChecked">En activité</label>
+                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.isactive ? 'checked=""' : '' }} >
+                                <p class="fs-5">Id: {{ hall.id }}</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-text mt-2 pt-3">
+                                <div class="row">
+                                    <p class="col-4 text-primary">N° de rue:</p>
+                                    <p class="col">{{ hall.streetNumber }}</p>
+                                </div>
+                                <div class="row">
+                                    <p class="col-4 text-primary">Adresse: </p>
+                                    <p class="col">{{ hall.adress }}</p>
+                                </div>
+                                <div class="row">
+                                    <p class="col-4 text-primary">Code Postale:</p>
+                                    <p class="col">{{ hall.postalCode }}</p>
+                                </div>
+                                <div class="row">
+                                    <p class="col-4 text-primary">Ville: </p>
+                                    <p class="col">{{ hall.city }}</p>
+                                </div>
+                                <div class="row">
+                                    <p class="col-4 text-primary">Téléphone:</p>
+                                    <p class="col">{{ hall.phone }}</p>
+                                </div>
+                                <div class="row">
+                                    <p class="col-12 text-primary">Déscription:</p>
+                                    <p class="col12">{{ hall.shortDescription }}</p>
+                                </div>
+                            </div>
+                            <a type="button" class="btn btn-outline-warning" href="{{ path('app_user_hall_permission', { id: hall.id }) }}">Modules de la salle: {{ hall.name }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+            <div class="navigation d-flex justify-content-center mt-5">
+            {{ knp_pagination_render(halls) }}
+        {% else %}
+            <h1>Vous n'avez pas de salles actuellements</h1>
+        {% endif %}
+            </div>
+    </main>
+        {{ dump() }}
+
+{% endblock %}
+
+

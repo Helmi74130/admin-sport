@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes modules{% endblock %}
+
+{% block body %}
+    <h1 class="m-5">Mes modules pour la salle {{ permissions.hall.name }}</h1>
+    <div class="container">
+        <div class="row justify-content-around">
+            <div class="card shadow col-5 mt-5 p-0 {{ permissions.isSellDrinks ? '' : 'opacity-50' }}">
+                <img src="https://cdn.pixabay.com/photo/2017/08/10/02/47/soda-2617417_960_720.jpg" height="400px" class="card-img-top " alt="...">
+                <div class="card-body">
+                    <h5 class="card-title fs-3">Vendre des boissons</h5>
+                    {% if permissions.isSellDrinks %}
+                        <a href="#" class="btn btn-primary mt-3">Accéder</a>
+                    {% else %}
+                        <p class="text-warning fs-4 mt-3 text-center">Vous n'avez pas accés à ce module</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card shadow col-5 mt-5 p-0 {{ permissions.isMembersWrite ? '' : 'opacity-50' }}">
+                <img src="https://cdn.pixabay.com/photo/2018/05/16/22/21/shopping-3407232_960_720.jpg" height="400px" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title fs-3">Modifier le statut d'un membre</h5>
+                    {% if permissions.isMembersWrite %}
+                        <a href="#" class="btn btn-primary mt-3">Accéder</a>
+                    {% else %}
+                        <p class="text-warning fs-4 mt-3 text-center">Vous n'avez pas accés à ce module</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card shadow col-5 mt-5 p-0 {{ permissions.isMembersRead ? '' : 'opacity-50' }}">
+                <img src="https://cdn.pixabay.com/photo/2016/11/03/11/57/accountant-1794122_960_720.png" height="400px" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title fs-3">Accés au statut d'un membre</h5>
+                    {% if permissions.isMembersRead %}
+                        <a href="#" class="btn btn-primary mt-3">Accéder</a>
+                    {% else %}
+                        <p class="text-warning fs-4 mt-3 text-center">Vous n'avez pas accés à ce module</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card shadow col-5 mt-5 p-0 {{ permissions.isMembersAdd ? '' : 'opacity-50' }}">
+                <img src="https://cdn.pixabay.com/photo/2017/12/13/18/05/networks-3017398_960_720.jpg" height="400px" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title fs-3">Ajouter un membre</h5>
+                    {% if permissions.isMembersAdd %}
+                        <a href="#" class="btn btn-primary mt-3">Accéder</a>
+                    {% else %}
+                        <p class="text-warning fs-4 mt-3 text-center">Vous n'avez pas accés à ce module</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card shadow col-5 mt-5 p-0 {{ permissions.isMembersStatistiqueRead ? '' : 'opacity-50' }}">
+                <img src="https://cdn.pixabay.com/photo/2016/06/03/13/57/digital-marketing-1433427_960_720.jpg" height="400px" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title fs-3">Voir les statistiques d'un membre</h5>
+                    {% if permissions.isMembersStatistiqueRead %}
+                        <a href="#" class="btn btn-primary mt-3">Accéder</a>
+                    {% else %}
+                        <p class="text-warning fs-4 mt-3 text-center">Vous n'avez pas accés à ce module</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card shadow col-5 mt-5 p-0 {{ permissions.isPaymentSchedulesWrite ? '' : 'opacity-50' }}">
+                <img src="https://cdn.pixabay.com/photo/2017/08/31/13/34/business-2700757_960_720.jpg" height="400px" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title fs-3">Modifier les échéanciés de paiement</h5>
+                    {% if permissions.isPaymentSchedulesWrite %}
+                        <a href="#" class="btn btn-primary mt-3">Accéder</a>
+                    {% else %}
+                        <p class="text-warning fs-4 mt-3 text-center">Vous n'avez pas accés à ce module</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card shadow col-5 mt-5 p-0 {{ permissions.isPaymentSchedulesAdd ? '' : 'opacity-50' }}">
+                <img src="https://cdn.pixabay.com/photo/2018/07/24/18/30/online-banking-3559760_960_720.jpg" height="400px" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title fs-3">Accés aux échéanciés de paiement</h5>
+                    {% if permissions.isPaymentSchedulesAdd %}
+                        <a href="#" class="btn btn-primary mt-3">Accéder</a>
+                    {% else %}
+                        <p class="text-warning fs-4 mt-3 text-center">Vous n'avez pas accés à ce module</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ dump() }}
+{% endblock %}

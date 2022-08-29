@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -47,6 +49,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Hall::class)]
+    private Collection $hall;
+
+    public function __construct()
+    {
+        $this->hall = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -151,6 +161,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Hall>
+     */
+    public function getHall(): Collection
+    {
+        return $this->hall;
+    }
+
+    public function addHall(Hall $hall): self
+    {
+        if (!$this->hall->contains($hall)) {
+            $this->hall->add($hall);
+            $hall->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHall(Hall $hall): self
+    {
+        if ($this->hall->removeElement($hall)) {
+            // set the owning side to null (unless already changed)
+            if ($hall->getUser() === $this) {
+                $hall->setUser(null);
+            }
+        }
 
         return $this;
     }

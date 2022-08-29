@@ -32,6 +32,7 @@ class HallController extends AbstractController
 
         $halls = $paginator->paginate(
             $hallRepository->findAll(),
+            // permet de trouver par rapport aux users $hallRepository->findBy(['user' => $this->getUser()]),
             $request->query->getInt('page', 1),
             6
         );
@@ -50,6 +51,8 @@ class HallController extends AbstractController
     #[Route('/salle/ajouter', name: 'app_salle_ajouter', methods: ['GET', 'POST'])]
     public function add(Request $request, EntityManagerInterface $manager) :Response
     {
+
+
         $hall = new Hall();
 
         $form = $this->createForm(HallType::class, $hall);

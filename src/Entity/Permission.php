@@ -14,25 +14,25 @@ class Permission
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?bool $isSellDrinks = null;
+    private ?bool $isSellDrinks = true;
 
     #[ORM\Column]
-    private ?bool $isMembersWrite = null;
+    private ?bool $isMembersWrite = true;
 
     #[ORM\Column]
-    private ?bool $isMembersRead = null;
+    private ?bool $isMembersRead = true;
 
     #[ORM\Column]
-    private ?bool $isMembersAdd = null;
+    private ?bool $isMembersAdd = true;
 
     #[ORM\Column]
-    private ?bool $isMembersStatistiqueRead = null;
+    private ?bool $isMembersStatistiqueRead = true;
 
     #[ORM\Column]
-    private ?bool $isPaymentSchedulesWrite = null;
+    private ?bool $isPaymentSchedulesWrite = true;
 
     #[ORM\Column]
-    private ?bool $isPaymentSchedulesAdd = null;
+    private ?bool $isPaymentSchedulesAdd = true;
 
     #[ORM\OneToOne(inversedBy: 'permissions', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]

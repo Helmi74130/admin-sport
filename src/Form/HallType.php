@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Hall;
 
 
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -36,7 +37,7 @@ class HallType extends AbstractType
                 'label' => 'N° de rue *',
                 'attr' => [
                     'minlength' => 1,
-                    'maxlength' => 10
+                    'maxlength' => 5
                 ]
             ])
             ->add('adress', TextareaType::class, [
@@ -55,7 +56,7 @@ class HallType extends AbstractType
             ->add('phone', TextType::class, [
                 'label' => 'Téléphone *',
                 'attr' => [
-                    'minlength' => '5',
+                    'minlength' => '10',
                     'maxlength' => '12'
                 ]
             ])

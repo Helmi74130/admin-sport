@@ -39,7 +39,7 @@ class Hall
     private ?string $city = null;
 
     #[ORM\Column]
-    private ?bool $isactive = null;
+    private ?bool $isactive = true;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank()]
@@ -55,6 +55,9 @@ class Hall
     #[ORM\ManyToOne(inversedBy: 'hall')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Leader $leader = null;
+
+    #[ORM\ManyToOne(inversedBy: 'hall')]
+    private ?User $user = null;
 
 
     public function getId(): ?int
@@ -191,6 +194,18 @@ class Hall
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
 
