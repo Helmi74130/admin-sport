@@ -37,17 +37,15 @@ class HallController extends AbstractController
         ]);
     }
 
-    /**
-     * This controller show a form for create hall
-     * @param EntityManagerInterface $manager
-     * @param Request $request
-     * @return Response
-     */
-
     #[Route('/salle/ajouter', name: 'app_salle_ajouter', methods: ['GET', 'POST'])]
     public function add(Request $request, EntityManagerInterface $manager) :Response
     {
-
+        /**
+         * This controller show a form for create hall
+         * @param EntityManagerInterface $manager
+         * @param Request $request
+         * @return Response
+         */
 
         $hall = new Hall();
 
@@ -91,17 +89,16 @@ class HallController extends AbstractController
         ]);
     }
 
-    /**
-     * This controller edit a hall
-     * @param EntityManagerInterface $manager
-     * @param Request $request
-     * @param Hall $hall
-     * @return Response
-     */
-
     #[Route('/salle/editer/{id}', name: 'app_salle_editer', methods: ['GET', 'POST'])]
     public function edit(Hall $hall, Request $request, EntityManagerInterface $manager):Response
     {
+        /**
+         * This controller edit a hall
+         * @param EntityManagerInterface $manager
+         * @param Request $request
+         * @param Hall $hall
+         * @return Response
+         */
 
         $form = $this->createForm(HallType::class, $hall);
         $form->handleRequest($request);
@@ -125,16 +122,15 @@ class HallController extends AbstractController
         ]);
     }
 
-    /**
-     * This controller delete a hall
-     * @param EntityManagerInterface $manager
-     * @param Hall $hall
-     * @return Response
-     */
-
     #[Route('/salle/supprimer/{id}', name: 'app_salle_supprimer', methods: ['GET'])]
     public function delete( EntityManagerInterface $manager, Hall $hall):Response
     {
+        /**
+         * This controller delete a hall
+         * @param EntityManagerInterface $manager
+         * @param Hall $hall
+         * @return Response
+         */
 
         $manager->remove($hall);
         $manager->flush();

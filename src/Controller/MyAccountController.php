@@ -12,6 +12,11 @@ class MyAccountController extends AbstractController
     #[Route('/compte', name: 'app_my_account')]
     public function index(HallRepository $hallRepository): Response
     {
+        /**
+         * This controller show user halls
+         * @param HallRepository $halls
+         * @return Response
+         */
 
         $halls = $hallRepository->findBy(['user'=> $this->getUser()]);
         return $this->render('pages/my_account/home.html.twig', [

@@ -67,6 +67,7 @@ class Hall
     private ?Leader $leader = null;
 
     #[ORM\ManyToOne(inversedBy: 'hall')]
+    //#[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
 
@@ -263,7 +264,6 @@ class Hall
 
         return $this;
     }
-
 
 
 }

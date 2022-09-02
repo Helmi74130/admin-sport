@@ -3,10 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Hall;
-use App\Entity\Leader;
-use App\Entity\Permission;
 use App\Repository\HallRepository;
-use App\Repository\PermissionRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,13 +53,9 @@ class UserHallController extends AbstractController
         ]);
     }
 
-
     #[Route('/utilisateur/salles/{id}', name: 'app_user_hall_permission')]
     public function modules($id, ManagerRegistry $doctrine, Request $request): Response
     {
-
-
-
         /**
          * This controller display users halls
          * @param HallRepository $hallRepository

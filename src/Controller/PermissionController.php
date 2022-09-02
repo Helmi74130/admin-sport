@@ -36,16 +36,16 @@ class PermissionController extends AbstractController
         ]);
     }
 
-    /**
-     * This controller show a form for create permission
-     * @param EntityManagerInterface $manager
-     * @param Request $request
-     * @return Response
-     */
-
     #[Route('/permission/ajouter', name: 'app_ajouter', methods: ['GET', 'POST'])]
     public function add(Request $request, EntityManagerInterface $manager) :Response
     {
+        /**
+         * This controller show a form for create permission
+         * @param EntityManagerInterface $manager
+         * @param Request $request
+         * @return Response
+         */
+
         $permission = new Permission();
         $form = $this->createForm(PermissionType::class, $permission);
 
@@ -70,17 +70,16 @@ class PermissionController extends AbstractController
         ]);
     }
 
-    /**
-     * This controller edit a permission
-     * @param EntityManagerInterface $manager
-     * @param Request $request
-     * @param Permission $permission
-     * @return Response
-     */
-
     #[Route('/permission/editer/{id}', name: 'app_editer', methods: ['GET', 'POST'])]
     public function edit(Permission $permission, Request $request, EntityManagerInterface $manager):Response
     {
+        /**
+         * This controller edit a permission
+         * @param EntityManagerInterface $manager
+         * @param Request $request
+         * @param Permission $permission
+         * @return Response
+         */
 
         $form = $this->createForm(PermissionType::class, $permission);
         $form->handleRequest($request);

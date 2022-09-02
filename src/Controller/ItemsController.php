@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\HallRepository;
 use App\Repository\LeaderRepository;
-use App\Repository\PermissionRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

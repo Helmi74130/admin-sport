@@ -79,7 +79,22 @@ class HallType extends AbstractType
                 'label' => 'Image de la salle',
                 'required' => false
             ])
+
         ;
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $user = $event->getData();
+            $form = $event->getForm();
+
+            // checks if the Permission object is "new"
+            // If no data is passed to the form, the data is "null".
+            // This should be considered a new "Permission"
+            if (!$user || null === $user->getId()) {
+                $form->add('user',null, [
+                    'mapped' => true,
+                    'label' => 'Avec quelle utilisateur souhaité(e) vous faire un lien?'
+                ]);
+            }
+        });
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $leader = $event->getData();

@@ -6,12 +6,10 @@ use App\Entity\Hall;
 use App\Entity\Leader;
 use App\Entity\Permission;
 use App\Form\LeaderType;
-use App\Repository\HallRepository;
 use App\Repository\LeaderRepository;
 use App\Repository\PermissionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-//use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,16 +86,16 @@ class LeaderController extends AbstractController
         ]);
     }
 
-    /**
-     * This controller show a form for create leader
-     * @param EntityManagerInterface $manager
-     * @param Request $request
-     * @return Response
-     */
-
     #[Route('/gerants/ajouter', name: 'app_ajouter_leader', methods: ['GET', 'POST'])]
     public function add(Request $request, EntityManagerInterface $manager) :Response
     {
+        /**
+         * This controller show a form for create leader
+         * @param EntityManagerInterface $manager
+         * @param Request $request
+         * @return Response
+         */
+
         $leader = new Leader();
         $form = $this->createForm(LeaderType::class, $leader);
 
@@ -122,18 +120,16 @@ class LeaderController extends AbstractController
         ]);
     }
 
-
-    /**
-     * This controller edit a leader
-     * @param EntityManagerInterface $manager
-     * @param Request $request
-     * @param Leader $leader
-     * @return Response
-     */
-
     #[Route('/gerants/editer/{id}', name: 'app_leader_editer', methods: ['GET', 'POST'])]
     public function edit(Leader $leader, Request $request, EntityManagerInterface $manager):Response
     {
+        /**
+         * This controller edit a leader
+         * @param EntityManagerInterface $manager
+         * @param Request $request
+         * @param Leader $leader
+         * @return Response
+         */
 
         $form = $this->createForm(LeaderType::class, $leader);
         $form->handleRequest($request);
@@ -157,16 +153,16 @@ class LeaderController extends AbstractController
         ]);
     }
 
-    /**
-     * This controller delete a leader
-     * @param EntityManagerInterface $manager
-     * @param Leader $leader
-     * @return Response
-     */
-
     #[Route('/gerants/supprimer/{id}', name: 'app_supprimer_leader', methods: ['GET'])]
     public function delete(EntityManagerInterface $manager, Leader $leader):Response
     {
+        /**
+         * This controller delete a leader
+         * @param EntityManagerInterface $manager
+         * @param Leader $leader
+         * @return Response
+         */
+
         $manager->remove($leader);
         $manager->flush();
 

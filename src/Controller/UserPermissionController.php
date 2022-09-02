@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\HallRepository;
-use App\Repository\PermissionRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +14,6 @@ class UserPermissionController extends AbstractController
     #[Route('/utilisateur/permission', name: 'app_user_permission')]
     public function index(HallRepository $hallRepository, PaginatorInterface $paginator, Request $request): Response
     {
-
         /**
          * This controller display all permissions
          * @param HallRepository $hallRepository

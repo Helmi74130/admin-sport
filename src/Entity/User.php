@@ -50,7 +50,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Hall::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Hall::class, cascade: ['persist', 'remove'])]
+    //#[ORM\JoinColumn(nullable: true)]//
     private Collection $hall;
 
     public function __construct()
@@ -196,8 +197,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-
+    public function __toString()
+    {
+        return $this->name;
+    }
 
 
 }
