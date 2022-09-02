@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Apps | Mes accés aux modules{% endblock %}
+
+{% block body %}
+
+
+    <div class="container">
+        <h1>Choissisez la salle de votre choix</h1>
+        <div class="row justify-content-around">
+            {% for hall in halls %}
+                <div class="card col-5 mt-5">
+                    {% if hall.imageName == "" %}
+                        <img class="card-img-top" alt="image de salle de sport" height="400px" src="images/hall/orange bleu.jpg">
+                    {% else %}
+                        <img class="card-img-top" alt="image de salle de sport" height="400px" src="{{ vich_uploader_asset(hall, 'imageFile') }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">Salle: {{ hall.name }}</h5>
+                        <p class="card-text">Accéder à vos modules</p>
+                        <a type="button" class="btn btn-outline-warning" href="{{ path('app_user_hall_permission', { id: hall.id }) }}">Modules de votre salle: {{ hall.name }}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

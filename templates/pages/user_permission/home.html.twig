@@ -12,13 +12,10 @@
         {% if not permissions.items is same as ([]) %}
             <div class="row justify-content-around">
                 {% for item in permissions.items %}
-                    <div class="card col-5 mt-4 p-0 rounded shadow border border-primary">
-                        <div class="card-header d-flex justify-content-between">
-                            <h5 class=" mt-2 lh-lg text-primary">Permissions pour la salle: <br> {{ item.name }} </h5>
-                            <div class="form-check disabled">
-                                <label class="form-check-label" for="flexCheckChecked">En activité</label>
-                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ item.isactive ? 'checked=""' : '' }}>
-                            </div>
+                    <div class="card col-5 mt-5 p-0 rounded shadow {{ item.isactive ? '' : 'opacity-50' }}">
+                        <div class="card-header d-flex justify-content-between bg-primary">
+                            <h5 class=" mt-2 lh-lg {{ item.isactive ? 'text-light' : 'text-danger' }}">Salle: {{ item.name }} </h5>
+                            <p class="text-danger">{{ item.isActive ? '' : 'Cette salle est désactivée' }}</p>
                         </div>
                         {% if item.permissions is same as null %}
                             <h3 class="m-5 text-danger text-center fs-4 lh-lg">Attention cette salle n'a pas de permission, veuillez contacter un administrateur pour vous accorder des permissions</h3>

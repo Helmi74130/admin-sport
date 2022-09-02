@@ -8,6 +8,7 @@ use App\Entity\Permission;
 use App\Form\LeaderType;
 use App\Repository\HallRepository;
 use App\Repository\LeaderRepository;
+use App\Repository\PermissionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 //use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -43,7 +44,7 @@ class LeaderController extends AbstractController
 
 
     #[Route('/gerants/appercu/{id}', name: 'app_leader_view', methods: ['GET'])]
-    public function view( ManagerRegistry $doctrine, int $id, Leader $leader): Response
+    public function view( ManagerRegistry $doctrine, int $id, Leader $leader, PermissionRepository $permissionRepository): Response
     {
         /**
          * This controller display all leaders
@@ -54,12 +55,14 @@ class LeaderController extends AbstractController
          */
 
         $leaders = $doctrine->getRepository(Leader::class)->find($id);
+        $permissions = $permissionRepository->findAll();//
 
         $halls = $leader->getHall();
 
         return $this->render('pages/leader/view.html.twig', [
             'leaders'=> $leaders,
             'halls' => $halls,
+            'permissions' => $permissions
         ]);
     }
 
@@ -77,7 +80,6 @@ class LeaderController extends AbstractController
         $leaders = $doctrine->getRepository(Hall::class)->find($id);
 
         $halls = $leader->getHall();
-
 
 
         return $this->render('pages/leader/viewperm.html.twig', [

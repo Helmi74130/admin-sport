@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MyAccountController!{% endblock %}
+
+{% block body %}
+    {{ dump() }}
+
+    <h1 class="m-5">Bienvenue dans votre compte {% for hall in halls %}{{ hall.user.name }} {{ hall.user.firstname }}{% endfor%}</h1>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-10">
+                <h2 class="mb-3">Paramétres</h2>
+                <p>Changer mon mot de passe <a href="{{ path('app_forgot_password_request') }}">Réinitialiser</a></p>
+                <p>Contacter un administrateur<a href="{{ path('app_contact') }}">Contact</a></p>
+                <p>Nous joindre par tél <a href="tel:+33744154545">Téléphone</a></p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

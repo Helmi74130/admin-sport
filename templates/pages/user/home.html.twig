@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+{{ dump() }}
+    <h1 class="m-5">Gérer les Utilisateurs</h1>
+    <div class="container">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success mt-4">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% if not users.items is same as ([]) %}
+            <div class="row justify-content-between">
+                <p class="col">Il y'a {{ users.getTotalItemCount }} utilisateurs au total</p>
+                <div class="col d-flex justify-content-end">
+                    <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un utilisateur</a>
+                </div>
+            </div>
+
+
+            <div class="row justify-content-around mt-5">
+                {% for user in users %}
+                    <div class="card col-5">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ user.name }} {{ user.firstname }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted mt-3">{{ user.email }}</h6>
+                            <div class="card-text border-top mt-4 border-bottom">
+                                <div>
+                                    <h6 class="fs-4">Roles:</h6>
+                                    {% for role in user.roles %}
+                                        {% if role == 'ROLE_ADMIN' %}
+                                            <p>Administrateur</p>
+                                        {% elseif role == 'ROLE_LEADER' %}
+                                            <p>Gérants</p>
+                                        {% elseif role == 'ROLE_USER'%}
+                                            <p>Structure</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <a href="{{ path('app_user_edit', {id: user.id} ) }}" class="card-link">Modifier</a>
+                            <a href="#" class="card-link">Another link</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="navigation d-flex justify-content-center mt-5">
+                    {{ knp_pagination_render(users) }}
+        {% else %}
+                    <h1>Il n'y a pas de salles actuellements, cliquer sur le bouton ajouter pour commencer!</h1>
+                    <div class="col d-flex justify-content-end">
+                        <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un utilisateur</a>
+                    </div>
+        {% endif %}
+            </div>
+    </div>
+{% endblock %}

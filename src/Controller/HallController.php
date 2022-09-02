@@ -3,14 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Hall;
-use App\Entity\Leader;
 use App\Entity\Permission;
 use App\Form\HallType;
-use App\Form\PermissionType;
 use App\Repository\HallRepository;
-use App\Repository\LeaderRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,17 +56,34 @@ class HallController extends AbstractController
 
         if ($form->isSubmitted()){
 
+
+            //test
+
+            $permission = new Permission();
+
+            $permission->setIsMembersAdd(1);
+            $permission->setIsMembersRead(1);
+            $permission->setIsMembersStatistiqueRead(1);
+            $permission->setIsMembersWrite(1);
+            $permission->setIsPaymentSchedulesAdd(1);
+            $permission->setIsSellDrinks(1);
+            $permission->setIsPaymentSchedulesWrite(1);
+            $permission->setHall($hall);
+            $manager->persist($permission);
+            //
+
             $hall = $form->getData();
+
             $manager->persist($hall);
             $manager->flush();
+
 
             $this->addFlash(
                 'success-salle',
                 'Votre salle a été ajoutée avec succès !'
             );
 
-            return $this->redirectToRoute('app_ajouter');
-           // return $this->redirectToRoute('app_hall');
+            return $this->redirectToRoute('app_hall');
 
         }
         return $this->render('pages/hall/add.html.twig', [
@@ -103,7 +116,7 @@ class HallController extends AbstractController
                 'Votre salle a été modifiée avec succès !'
             );
 
-            return $this->redirectToRoute('app_leader');
+            return $this->redirectToRoute('app_hall');
 
         }
 

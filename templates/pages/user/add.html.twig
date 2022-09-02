@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Apps | Ajouter un utilisateur{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+    <h1 class="m-5">Ajouter un utilisateur</h1>
+
+    <div class="container">
+        <div class="row justify-content-around shadow">
+            <div class="col-5 text-center mt-3">{{ form_row(form.firstname) }}</div>
+            <div class="col-5 text-center mt-3">{{ form_row(form.name) }}</div>
+            <div class="col-5 text-center mt-3">{{ form_row(form.roles) }}</div>
+            <div class="col-5 text-center mt-3">{{ form_row(form.hall) }}</div>
+            <div class="col-5 text-center mt-3">{{ form_row(form.email) }}</div>
+        </div>
+        <button class="btn btn-outline-warning m-5 align-self-end">Ajouter</button>
+    </div>
+
+    {{ form_end(form) }}
+
+    {{ dump() }}
+{% endblock %}

@@ -11,7 +11,11 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class HallType extends AbstractType
 {
@@ -30,14 +34,18 @@ class HallType extends AbstractType
                 'label' => 'Courte déscription',
                 'required' => false,
                 'attr' => [
-                    'minlength' => '2'
+                    'minlength' => '2',
+                    'maxlength' => '1000'
                 ]
             ])
             ->add('streetNumber', IntegerType::class, [
                 'label' => 'N° de rue *',
                 'attr' => [
-                    'minlength' => 1,
-                    'maxlength' => 5
+                    'minlength' => '1',
+                    'maxlength' => '5'
+                ],
+                'constraints' => [
+                    new Assert\Positive()
                 ]
             ])
             ->add('adress', TextareaType::class, [
@@ -67,10 +75,26 @@ class HallType extends AbstractType
                     'maxlength' => '6'
                 ]
             ])
-            ->add('leader',null, [
-                'mapped' => true,
-                'label' => 'Avec quelle gérant souhaité(e) vous faire un lien?'
-            ]);
+            ->add('imageFile', VichImageType::class, [
+                'label' => 'Image de la salle',
+                'required' => false
+            ])
+        ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $leader = $event->getData();
+            $form = $event->getForm();
+
+            // checks if the Permission object is "new"
+            // If no data is passed to the form, the data is "null".
+            // This should be considered a new "Permission"
+            if (!$leader || null === $leader->getId()) {
+                $form->add('leader',null, [
+                    'mapped' => true,
+                    'label' => 'Avec quelle gérant souhaité(e) vous faire un lien?'
+                ]);
+            }
+        });
 
     }
 

@@ -8,6 +8,8 @@ use App\Repository\HallRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PermissionType extends AbstractType
@@ -39,16 +41,28 @@ class PermissionType extends AbstractType
             ->add('isPaymentSchedulesAdd', null, [
                 'label'    => 'Peut-il ajouter un échéancié de paiement ?',
             ])
-            ->add('hall', EntityType::class, [
-                'class' => Hall::class,
-                'query_builder' => function(HallRepository $repository){
-                    return $repository->createQueryBuilder('i')
-                        ->orderBy('i.name', 'ASC');
-                },
-                'choice_label' => 'name',
-                'label' => 'Avec quelle salle souhaité(e) vous faire un lien?'
-            ])
+
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $permission = $event->getData();
+            $form = $event->getForm();
+
+            // checks if the Leader object is "new"
+            // If no data is passed to the form, the data is "null".
+            // This should be considered a new "Leader"
+            if (!$permission || null === $permission->getId()) {
+                $form->add('hall', EntityType::class, [
+                    'class' => Hall::class,
+                    'query_builder' => function(HallRepository $repository){
+                        return $repository->createQueryBuilder('i')
+                            ->orderBy('i.name', 'ASC');
+                    },
+                    'choice_label' => 'name',
+                    'label' => 'Avec quelle salle souhaité(e) vous faire un lien?'
+                ]);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void

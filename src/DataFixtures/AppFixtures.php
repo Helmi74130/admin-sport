@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Contact;
 use App\Entity\Hall;
 use App\Entity\Leader;
 use App\Entity\Permission;
@@ -89,6 +90,19 @@ class AppFixtures extends Fixture
 
 
         }*/
+
+        for ($i=0; $i<5; $i++){
+            $contact= new Contact;
+
+            $contact->setEmail($faker->email)
+                ->setName($faker->lastName)
+                ->setMessage($faker->sentence($nbWords = 15, $variableNbWords = true))
+                ->setSubject($faker->sentence($nbWords = 2, $variableNbWords = true));
+
+
+            $manager->persist($contact);
+
+        }
 
         $manager->flush();
     }
