@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -22,13 +23,18 @@ class UserType extends AbstractType
         $builder
             ->add('roles', ChoiceType::class, [
                 'choices' => [
-                    'Administrateur' => 'ROLE_ADMIN',
-                    'Gérants' => 'ROLE_LEADER',
-                    'Structures' => 'ROLE_USER'
+                    'Gérant de salle' => 'ROLE_USER'
                 ],
                 'expanded'  => true, // liste déroulante
                 'multiple'  => true, // choix multiple
-                'label' => 'Définnisez les roles'
+                'label' => 'Rôle'
+            ])
+            ->add('civility', ChoiceType::class, [
+                'label' => 'Civilité',
+                'choices'  => [
+                    'Mme' => 'Mme',
+                    'Mr' => 'Mr',
+                ]
             ])
             ->add('firstname', TextType::class, [
                 'label' => 'Prénom',
@@ -43,7 +49,15 @@ class UserType extends AbstractType
                     'minlength' => '2',
                     'maxlength' => '50'
                 ]
-            ]);
+            ])
+            ->add('phone', TelType::class, [
+                'label'=> 'Tél. *',
+                'attr' => [
+                    'minlength' => '10',
+                    'maxlength' => '15'
+                ]
+            ])
+        ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $user = $event->getData();
@@ -88,7 +102,6 @@ class UserType extends AbstractType
                 ]);
             }
         });
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void

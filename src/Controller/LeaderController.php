@@ -8,16 +8,34 @@ use App\Entity\Permission;
 use App\Form\LeaderType;
 use App\Repository\LeaderRepository;
 use App\Repository\PermissionRepository;
+use App\Security\SecurityAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use App\Security\EmailVerifier;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class LeaderController extends AbstractController
 {
+
+    private EmailVerifier $emailVerifier;
+
+    public function __construct(EmailVerifier $emailVerifier)
+    {
+        $this->emailVerifier = $emailVerifier;
+    }
+
+
     #[Route('/gerants', name: 'app_leader', methods: ['GET'])]
     public function index(PaginatorInterface $paginator, Request $request, LeaderRepository $leaderRepository): Response
     {
@@ -87,7 +105,7 @@ class LeaderController extends AbstractController
     }
 
     #[Route('/gerants/ajouter', name: 'app_ajouter_leader', methods: ['GET', 'POST'])]
-    public function add(Request $request, EntityManagerInterface $manager) :Response
+    public function add(/*Request $request, EntityManagerInterface $manager*/Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, SecurityAuthenticator $authenticator, EntityManagerInterface $entityManager, MailerInterface $mailer) :Response
     {
         /**
          * This controller show a form for create leader
@@ -98,26 +116,78 @@ class LeaderController extends AbstractController
 
         $leader = new Leader();
         $form = $this->createForm(LeaderType::class, $leader);
-
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()){
-            $leader = $form->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $leader->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $leader,
+                    $form->get('password')->getData()
+                )
+            );
 
-            $manager->persist($leader);
-            $manager->flush();
+            $entityManager->persist($leader);
+            $entityManager->flush();
+
+            // generate a signed url and email it to the user
+            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $leader,
+                $email= (new TemplatedEmail())
+                    ->from(new Address('orangemyapps@gmail.com', 'Orange bleu admin'))
+                    ->to($leader->getEmail())
+                    ->subject('Confirmer votre adresse mail')
+                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    //pass variable user
+                    ->context([
+                        'user' => $leader
+                    ])
+            );
+
+            $mailer->send($email);
 
             $this->addFlash(
                 'success',
-                'Votre gérant a été ajoutée avec succès !'
+                'Le gérant a été ajouté avec succès !'
             );
 
+            /*return $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request
+            );*/
             return $this->redirectToRoute('app_leader');
+
 
         }
         return $this->render('pages/leader/add.html.twig', [
             'form'=> $form->createView()
         ]);
+    }
+
+    #[Route('/verify/email', name: 'app_verify_email')]
+    public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
+    {
+        /**
+         * This controller check mail
+         * @param TranslatorInterface $translator
+         * @param Request $request
+         * @return Response
+         */
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        // validate email confirmation link, sets User::isVerified=true and persists
+        try {
+            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+        } catch (VerifyEmailExceptionInterface $exception) {
+            $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+
+            return $this->redirectToRoute('app_register');
+        }
+
+        // @TODO Change the redirect on success and handle or remove the flash message in your templates
+        $this->addFlash('success', 'Votre adresse mail a bien été vérifiée.');
+
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/gerants/editer/{id}', name: 'app_leader_editer', methods: ['GET', 'POST'])]

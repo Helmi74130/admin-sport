@@ -8,10 +8,10 @@
             <ul class="navbar-nav me-auto">
                 {% if not app.user %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_user') }}">Utilisateur</a>
+                        <a class="nav-link" href="{{ path('app_leader') }}">Gérants Franchises</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_leader') }}">Gérants</a>
+                        <a class="nav-link" href="{{ path('app_user') }}">Gérants Salles</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_hall') }}">Salles</a>

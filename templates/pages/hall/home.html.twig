@@ -3,7 +3,7 @@
 {% block title %}My Apps | Salles{% endblock %}
 
 {% block body %}
-
+{{ dump() }}
     <h1 class="m-5">Gérer les Salles</h1>
         <div class="container">
             {% for message in app.flashes('success-salle') %}
@@ -13,28 +13,27 @@
             {% endfor %}
             {% if not halls.items is same as ([]) %}
                 <div class="row justify-content-between">
-                    <p class="col">Il y'a {{ halls.getTotalItemCount }} salles au total</p>
+                    <p class="col">Il y'a {{ halls.getTotalItemCount }} salle(s) au total</p>
                     <div class="col d-flex justify-content-end">
                         <a class="btn btn-outline-success" href="{{ path('app_salle_ajouter') }}">Ajouter une salle</a>
                     </div>
                 </div>
                 <div class="row justify-content-around">
                     {% for hall in halls %}
-                        <div class="card col-12 mt-5 p-0 bg-secondary rounded shadow {{ hall.isactive ? '' : 'opacity-50' }}">
+                        <div class="card col-12 mt-5 p-0 bg-secondary rounded shadow {{ hall.isactive ? '' : 'opacity-75' }}">
                             <div class="card-header d-flex justify-content-between bg-primary text-light">
                                 <div class="{{ hall.isactive ? 'text-light' : 'text-danger' }} mt-2 fs-2">
-                                    <p class="text-center">Salle: {{ hall.name }} </p>
+                                    <p class="text-center text-light">{{ hall.isActive ? 'Salle en activitée :' : 'Salle en inactivitée: ' }} {{ hall.name }} </p>
                                 </div>
-                                <p class="text-danger">{{ hall.isActive ? '' : 'Cette salle est désactivée' }}</p>
-                            </div>
-                            <div class="card-body p-0">
                                 <div class="row card-title mt-3">
-                                    <h5 class="col-5 fs-4 ms-3"> Gérant: Mr {{ hall.leader.name}} {{ hall.leader.firstname}}</h5>
-                                    <div class="col-5 d-flex justify-content-end">
+                                    <div class="col d-flex justify-content-end">
                                         <a type="button" class="btn btn-outline-warning rounded btn-sm me-4" href=" {{ path('app_salle_editer', {id: hall.id}) }}">Editer</a>
                                         <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hall.id }}">Supprimer</a>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="card-body p-0">
+
                                 <div class="row">
                                     {% if hall.imageName == "" %}
                                         {#<div style="height: 400px" class="col-5">
@@ -46,30 +45,32 @@
                                     {% endif %}
                                     <div class="card-text mt-2 pt-3 col-6 fs-4">
                                         <div class="row">
-                                            <p class="col-4 text-primary">N° de rue:</p>
-                                            <p class="col">{{ hall.streetNumber }}</p>
+                                            <p class="col-4 text-primary">Gérant(e) de la Franchise:</p>
+                                            <p class="col">{{ hall.leader.civility}} {{ hall.leader.name}} {{ hall.leader.firstname}}</p>
                                         </div>
+                                        {% if hall.user == null %}
+                                        {% else %}
+                                            <div class="row">
+                                                <p class="col-4 text-primary">Gérant(e) de la salle:</p>
+                                                <p class="col">{{ hall.user.civility}} {{ hall.user.name}} {{ hall.user.firstname}}</p>
+                                            </div>
+                                        {% endif %}
                                         <div class="row">
                                             <p class="col-4 text-primary">Adresse: </p>
-                                            <p class="col">{{ hall.adress }}</p>
-                                        </div>
-                                        <div class="row">
-                                            <p class="col-4 text-primary">Code Postale:</p>
-                                            <p class="col">{{ hall.postalCode }}</p>
-                                        </div>
-                                        <div class="row">
-                                            <p class="col-4 text-primary">Ville: </p>
-                                            <p class="col">{{ hall.city }}</p>
+                                            <p class="col">{{ hall.streetNumber }} {{ hall.adress }} {{ hall.postalCode }} {{ hall.city }}</p>
                                         </div>
                                         <div class="row">
                                             <p class="col-4 text-primary">Téléphone:</p>
                                             <p class="col">{{ hall.phone }}</p>
                                         </div>
                                         <div class="row">
-                                            <p class="col-12 text-primary">Déscription:</p>
-                                            <p class="col12">{{ hall.shortDescription }}</p>
+                                            <p class="col-4 text-primary">Déscription:</p>
+                                            {% if hall.shortDescription == '' %}
+                                                <p class="col">Cette salle ne possède aucune description</p>
+                                            {% else %}
+                                                <p class="col">{{ hall.shortDescription }}</p>
+                                            {% endif %}
                                         </div>
-                                        <p class="text-danger fs-4">{{ hall.isactive ? '' : 'Cette salle n\'est pas en activitée actuellement' }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +81,7 @@
         <div class="navigation d-flex justify-content-center mt-5">
             {{ knp_pagination_render(halls) }}
             {% else %}
-            <h1>Il n'y a pas de salles actuellements, cliquer sur le bouton ajouter pour commencer!</h1>
+                <h2 class="mt-5 lh-lg">Aucune salle pour le moment, veuillez cliquer sur le bouton ajouter pour commencer!</h2>
                 <div class="col d-flex justify-content-end">
                     <a class="btn btn-outline-success" href="{{ path('app_salle_ajouter') }}">Ajouter une salle</a>
                 </div>
@@ -108,8 +109,6 @@
                 </div>
             </div>
         </div>
-
-        {{ dump() }}
     {% endfor %}
 
 

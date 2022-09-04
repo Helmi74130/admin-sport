@@ -3,9 +3,9 @@
 {% block title %}Salles de {{ leaders.name }} {{ leaders.firstname }}{% endblock %}
 
 {% block body %}
-    {{ dump() }}
-    <h1 class="m-5">Salles de {{ leaders.name }} {{ leaders.firstname }}</h1>
+    <h1 class="m-5">Gérant(e) de la franchise {{ leaders.civility}} {{ leaders.name }} {{ leaders.firstname }}</h1>
     <div class="container">
+        {{ dump() }}
 
         {% for message in app.flashes('success-salle') %}
             <div class="alert alert-success mt-4">
@@ -13,56 +13,37 @@
             </div>
         {% endfor %}
 
-        <div class="col d-flex justify-content-end">
+        {#<div class="col d-flex justify-content-end">
             <a class="btn btn-outline-success"  href="{{ path('app_salle_ajouter') }}">Ajouter une salle à {{ leaders.name }} {{ leaders.firstname }}</a>
-        </div>
+        </div>#}
 
         <div class="row justify-content-around">
 
             {% for hall in halls %}
-                <div class="card col-12 mt-5 p-0 bg-secondary rounded shadow {{ hall.isactive ? '' : 'opacity-50' }}">
-                    <div class="card-header d-flex justify-content-between bg-primary text-light">
-                        <div class="{{ hall.isactive ? 'text-light' : 'text-danger' }} mt-2 fs-2">
-                            <p class="text-center">Salle: {{ hall.name }} </p>
+                <div class="card col-12 mt-5 p-0 bg-secondary rounded shadow {{ hall.isactive ? '' : 'opacity-75' }}">
+                    <div class="card-header d-flex bg-primary text-light">
+                        <div class="  {{ hall.isactive ? 'text-light' : 'text-danger' }} fs-4">
+                            <p class="text-center">{{ hall.isactive ? 'Salle en activitée:' : 'Salle en inactivitée: ' }} {{ hall.name|title }} </p>
                         </div>
-                        <div class="form-check disabled">
-                            <label class="form-check-label" for="flexCheckChecked">En activité</label>
-                            <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.isactive ? 'checked=""' : '' }} >
-                            <p class="fs-5">Id: {{ hall.id }}</p>
-                        </div>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="row card-title mt-3">
-                            <h5 class="col-5 fs-4 ms-3"> Gérant: Mr {{ hall.leader.name}} {{ hall.leader.firstname}}</h5>
-                            {% if hall.permissions is not same as null %}
-                                <div class="col-5 d-flex justify-content-end">
-                                    {% for permission in permissions %}
-                                        {% if permission.hall.name == hall.name %}
-                                        <a href="{#{{ path('app_editer', {id: hall.id}) }}#} {{ path('app_editer', {id: permission.id}) }}" type="button" class="btn btn-outline-info rounded btn-sm me-4">Editer les permissions</a>
+                        {% if hall.permissions is not same as null %}
+                            <div class=" col d-flex justify-content-end">
+                                {% for permission in permissions %}
+                                    {% if permission.hall.name == hall.name %}
+                                        <a href="{{ path('app_editer', {id: permission.id}) }}" type="button" class="btn btn-dark rounded btn-sm me-4">Editer les permissions</a>
                                     {% endif %}
-                                    {% endfor %}
-                                    <a href="{{ path('app_salle_editer', {id: hall.id}) }}" type="button" class="btn btn-outline-primary rounded btn-sm me-4" >Editer la salle</a>
-                                    <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hall.id }}">Supprimer la salle</a>
-                                </div>
-                            {% endif %}
-                        </div>
+                                {% endfor %}
+                                <a href="{{ path('app_salle_editer', {id: hall.id}) }}" type="button" class="btn btn-dark rounded btn-sm me-4" >Editer la salle</a>
+                                <a type="button" class="btn btn-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hall.id }}">Supprimer</a>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                    <div class="card-body p-0 mt-3">
                         <div class="row justify-content-around">
                             <div class="card-text mt-2 col-5 fs-4">
                                 <div class="row">
-                                    <p class="col-4 text-primary">N° de rue:</p>
-                                    <p class="col">{{ hall.streetNumber }}</p>
-                                </div>
-                                <div class="row">
                                     <p class="col-4 text-primary">Adresse: </p>
-                                    <p class="col">{{ hall.adress }}</p>
-                                </div>
-                                <div class="row">
-                                    <p class="col-4 text-primary">Code Postale:</p>
-                                    <p class="col">{{ hall.postalCode }}</p>
-                                </div>
-                                <div class="row">
-                                    <p class="col-4 text-primary">Ville: </p>
-                                    <p class="col">{{ hall.city }}</p>
+                                    <p class="col">{{ hall.streetNumber }} {{ hall.adress }} {{ hall.postalCode }} {{ hall.city }}</p>
                                 </div>
                                 <div class="row">
                                     <p class="col-4 text-primary">Téléphone:</p>
@@ -84,7 +65,7 @@
                                     </div>
                                 </div>
                             {% else %}
-                                <div class="col-6">
+                                <div class="col-6 mb-5">
                                     <div class="card-text mt-3 row justify-content-end">
                                         <div class="col-10 mt-2">
                                             <div class="form-check disabled">
@@ -159,7 +140,4 @@
             </div>
         </div>
     {% endfor %}
-{{ dump() }}
-
-
 {% endblock %}

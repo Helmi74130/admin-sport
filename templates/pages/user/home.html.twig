@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}Gérants de salles{% endblock %}
 
 {% block body %}
-{{ dump() }}
-    <h1 class="m-5">Gérer les Utilisateurs</h1>
+
+    {{ dump() }}
+    <h1 class="m-5">Gérer les gérants de salles</h1>
     <div class="container">
         {% for message in app.flashes('success') %}
             <div class="alert alert-success mt-4">
@@ -13,9 +14,9 @@
         {% endfor %}
         {% if not users.items is same as ([]) %}
             <div class="row justify-content-between">
-                <p class="col">Il y'a {{ users.getTotalItemCount }} utilisateurs au total</p>
+                <p class="col">Il y'a {{ users.getTotalItemCount }} gérant(s) de salle au total</p>
                 <div class="col d-flex justify-content-end">
-                    <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un utilisateur</a>
+                    <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un Gérant de salle</a>
                 </div>
             </div>
 
@@ -24,22 +25,19 @@
                 {% for user in users %}
                     <div class="card col-5 mt-5">
                         <div class="card-body">
-                            <h5 class="card-title">{{ user.name }} {{ user.firstname }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted mt-3">{{ user.email }}</h6>
-                            <div class="card-text border-top mt-4 border-bottom">
+                            <h5 class="card-title border-bottom pb-3">{{ user.civility }} {{ user.name }} {{ user.firstname }}</h5>
+                            <div class="card-text mt-4 border-bottom">
                                 <div class="d-flex justify-content-around mt-3">
                                     <h6 class="fs-4">Roles:</h6>
-                                    {% for role in user.roles %}
-                                        {% if role == 'ROLE_ADMIN' %}
-                                            <p>Administrateur</p>
-                                        {% elseif role == 'ROLE_LEADER' %}
-                                            <p>Gérants</p>
-                                        {% elseif role == 'ROLE_USER'%}
-                                            <p>Structure</p>
-                                        {% endif %}
-                                    {% endfor %}
+                                    {% if user.civility == 'Mr' %}
+                                        <p>Gérant de salle</p>
+                                    {% else %}
+                                        <p>Gérante de salle</p>
+                                    {% endif %}
                                 </div>
                             </div>
+                            <h6 class="card-subtitle mb-2 text-muted m-3">E-Mail: {{ user.email }}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted m-3">Tél: {{ user.phone }}</h6>
                             <div class="mt-3">
                                 <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ user.id }}">Modifier</a>
                                 <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ user.id }}">Supprimer</a>
@@ -52,10 +50,10 @@
             <div class="navigation d-flex justify-content-center mt-5">
                     {{ knp_pagination_render(users) }}
         {% else %}
-                    <h1>Il n'y a pas de salles actuellements, cliquer sur le bouton ajouter pour commencer!</h1>
-                    <div class="col d-flex justify-content-end">
-                        <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un utilisateur</a>
-                    </div>
+            <h2 class="lh-lg">Aucun gérant de salle pour le moment, veuillez cliquer sur le bouton ajouter pour commencer!</h2>
+            <div class="col d-flex justify-content-end">
+                <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un Gérant de salle</a>
+            </div>
         {% endif %}
             </div>
     </div>
@@ -98,7 +96,5 @@
                 </div>
             </div>
         </div>
-
-        {{ dump() }}
     {% endfor %}
 {% endblock %}

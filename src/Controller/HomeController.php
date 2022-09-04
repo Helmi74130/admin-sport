@@ -28,6 +28,7 @@ class HomeController extends AbstractController
             $request->query->getInt('page', 1),
             6
         );
+
         return $this->render('pages/home.html.twig', [
             'halls'=> $halls
         ]);

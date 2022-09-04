@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My Apps | Ajouter une Salle{% endblock %}
+{% block title %}Ajouter une Salle{% endblock %}
 
 {% block body %}
     {{ form_start(form) }}
@@ -8,7 +8,7 @@
 
     <div class="container">
         <div class="row text-warning fs-1 bg-primary p-5 shadow">
-            <h2 class="text-center text-danger fs-2">Avant de continuer veuillez lier la salle avec le gérant</h2>
+            <h2 class="text-center text-danger fs-2">Avant de continuer veuillez lier la salle avec les gérants</h2>
             <p>{{ form_row(form.leader) }}</p>
             <p>{{ form_row(form.user) }}</p>
         </div>

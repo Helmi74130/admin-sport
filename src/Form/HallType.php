@@ -91,7 +91,7 @@ class HallType extends AbstractType
             if (!$user || null === $user->getId()) {
                 $form->add('user',null, [
                     'mapped' => true,
-                    'label' => 'Avec quelle utilisateur souhaité(e) vous faire un lien?'
+                    'label' => 'Avec quelle gérant de SALLE souhaité(e) vous faire un lien?'
                 ]);
             }
         });
@@ -106,7 +106,7 @@ class HallType extends AbstractType
             if (!$leader || null === $leader->getId()) {
                 $form->add('leader',null, [
                     'mapped' => true,
-                    'label' => 'Avec quelle gérant souhaité(e) vous faire un lien?'
+                    'label' => 'Avec quelle gérant de FRANCHISE souhaité(e) vous faire un lien?'
                 ]);
             }
         });

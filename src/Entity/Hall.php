@@ -66,9 +66,9 @@ class Hall
     #[ORM\JoinColumn(nullable: false)]
     private ?Leader $leader = null;
 
-    #[ORM\ManyToOne(inversedBy: 'hall')]
-    //#[ORM\JoinColumn(nullable: true)]
+    #[ORM\OneToOne( inversedBy:'hall', cascade: ['persist', 'remove'])]
     private ?User $user = null;
+
 
 
     public function getId(): ?int
@@ -260,10 +260,19 @@ class Hall
 
     public function setUser(?User $user): self
     {
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setHall(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getHall() !== $this) {
+            $user->setHall($this);
+        }
+
         $this->user = $user;
 
         return $this;
     }
-
 
 }

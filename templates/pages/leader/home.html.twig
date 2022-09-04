@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My Apps | Gérants{% endblock %}
+{% block title %}Gérants de Franchises{% endblock %}
 
 {% block body %}
-
-    <h1 class="m-5">Gérer les gérants</h1>
+{{ dump() }}
+    <h1 class="m-5">Gérants de franchises</h1>
     <div class="container">
     {% for message in app.flashes('success') %}
         <div class="alert alert-success mt-4">
@@ -13,23 +13,23 @@
     {% endfor %}
     {% if not leaders.items is same as ([]) %}
         <div class="row justify-content-between">
-            <p class="col">Il y'a {{ leaders.getTotalItemCount }} gérants au total</p>
+            <p class="col">Il y'a {{ leaders.getTotalItemCount }} gérant(s) de franchises au total</p>
             <div class="col d-flex justify-content-end">
-                <a class="btn btn-outline-success" href="{{ path('app_ajouter_leader') }}">Ajouter un Gérant</a>
+                <a class="btn btn-outline-success" href="{{ path('app_ajouter_leader') }}">Ajouter un Gérant de franchises</a>
             </div>
         </div>
         <div class="row justify-content-around">
             {% for leader in leaders %}
                 <div class="card col-5 mt-4 p-0 rounded shadow {{ leader.isActive ? '' : 'opacity-50' }}">
                     <div class="card-header d-flex justify-content-between bg-primary">
-                        <h5 class="fs-3 mt-2 lh-lg {{ leader.isActive ? 'text-light' : 'text-danger' }}">{{ leader.name }} {{ leader.firstname}}</h5>
-                        <p class="text-danger">{{ leader.isActive ? '' : 'Ce gérant est désactivé' }}</p>
+                        <h5 class="fs-3 mt-2 lh-lg {{ leader.isActive ? 'text-light' : 'text-danger' }}">{{ leader.civility }} {{ leader.name }} {{ leader.firstname}}</h5>
+                        <p class="{{ leader.isActive ? 'text-success' : 'text-danger' }}">{{ leader.isActive ? 'En activité' : 'Ce gérant est désactivé' }}</p>
                     </div>
                     <div class="card-body">
                             <div class="card-text pt-2 text-primary">
                                 <div class="row">
                                     <p class="col-4">E-mail:</p>
-                                    <p class="col">{{ leader.mail }}</p>
+                                    <p class="col">{{ leader.email }}</p>
                                 </div>
                                 <div class="row ">
                                     <p class="col-4">Ville</p>
@@ -41,13 +41,17 @@
                                 </div>
                                 <div class="row">
                                     <p class="col-4">Tél. commercial: </p>
-                                    <p class="col">{{ leader.commercialPhone }}</p>
+                                    {% if leader.commercialPhone == '' %}
+                                        <p class="col text-warning">Aucun tél. renseigné</p>
+                                    {% else %}
+                                        <p class="col">{{ leader.commercialPhone }}</p>
+                                    {% endif %}
                                 </div>
                             </div>
                         <div class="d-flex justify-content-end mt-3">
-                            <a href="{{ path('app_leader_view',{id: leader.id}) }}" type="button" class="btn btn-outline-info rounded btn-sm me-4">Voir les salles de {{ leader.name }} {{ leader.firstname}} </a>
-                            <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ leader.id }}">Editer le gérant</a>
-                            <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ leader.id }}">Supprimer le gérant</a>
+                            <a href="{{ path('app_leader_view',{id: leader.id}) }}" type="button" class="btn btn-outline-info rounded btn-sm me-4">Voir les salles</a>
+                            <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ leader.id }}">Editer</a>
+                            <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ leader.id }}">Supprimer</a>
                         </div>
                     </div>
                 </div>
@@ -57,7 +61,7 @@
         <div class="navigation d-flex justify-content-center mt-5">
         {{ knp_pagination_render(leaders) }}
     {% else %}
-        <h2 class="mt-5">Il n'y a pas de Gérants pour le moment, cliqué sur le bouton ajouter pour commencer</h2>
+        <h2 class="mt-5 lh-lg">Aucun gérant(e) de franchise pour le moment, veuillez cliquer sur le bouton ajouter pour commencer!</h2>
         <div class="col d-flex justify-content-end">
             <a class="btn btn-outline-success" href="{{ path('app_ajouter_leader') }}">Ajouter un Gérant</a>
         </div>
@@ -105,5 +109,4 @@
             </div>
         </div>
     {% endfor %}
-    {{ dump() }}
 {% endblock %}

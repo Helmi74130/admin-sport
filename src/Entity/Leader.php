@@ -1,14 +1,20 @@
 <?php
 namespace App\Entity;
 use App\Repository\LeaderRepository;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
+#[UniqueEntity('email')]
+#[UniqueEntity(fields: ['email'], message: 'Un compte existe déja avec cette adresse mail')]
 #[ORM\Entity(repositoryClass: LeaderRepository::class)]
-class Leader
+class Leader implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,7 +34,16 @@ class Leader
     #[ORM\Column(length: 50)]
     #[Assert\Email()]
     #[Assert\Length(min:2, max:50)]
-    private ?string $mail = null;
+    private ?string $email = null;
+
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    private ?string $password = null;
 
     #[ORM\Column(length: 80)]
     #[Assert\NotBlank()]
@@ -48,10 +63,70 @@ class Leader
     private ?bool $isActive = true;
     #[ORM\OneToMany(mappedBy: 'leader', targetEntity: Hall::class, orphanRemoval: true)]
     private Collection $hall;
+
+    #[ORM\Column(length: 5)]
+    private ?string $civility = null;
+
     public function __construct()
     {
         $this->hall = new ArrayCollection();
     }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_LEADER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,13 +149,13 @@ class Leader
         $this->firstname = $firstname;
         return $this;
     }
-    public function getMail(): ?string
+    public function getEmail(): ?string
     {
-        return $this->mail;
+        return $this->email;
     }
-    public function setMail(string $mail): self
+    public function setEmail(string $email): self
     {
-        $this->mail = $mail;
+        $this->email = $email;
         return $this;
     }
     public function getCity(): ?string
@@ -147,5 +222,18 @@ class Leader
     public function __toString()
     {
         return $this->name.' '.$this->firstname;
+    }
+
+
+    public function getCivility(): ?string
+    {
+        return $this->civility;
+    }
+
+    public function setCivility(string $civility): self
+    {
+        $this->civility = $civility;
+
+        return $this;
     }
 }

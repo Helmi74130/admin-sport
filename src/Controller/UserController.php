@@ -100,7 +100,7 @@ class UserController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'L\'utilisateur a été ajouté avec succès !'
+                'Le gérant de salle a été ajouté avec succès !'
             );
 
             /*return $userAuthenticator->authenticateUser(

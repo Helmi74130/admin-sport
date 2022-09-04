@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -29,8 +27,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-
-
     /**
      * @var string The hashed password
      */
@@ -50,14 +46,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Hall::class, cascade: ['persist', 'remove'])]
-    //#[ORM\JoinColumn(nullable: true)]//
-    private Collection $hall;
 
-    public function __construct()
-    {
-        $this->hall = new ArrayCollection();
-    }
+    #[ORM\Column(length: 5)]
+    private ?string $civility = null;
+
+    #[ORM\Column(length: 15)]
+    private ?string $phone = null;
+
+    #[ORM\OneToOne( mappedBy:'user', cascade: ['persist', 'remove'])]
+    private ?Hall $hall = null;
 
     public function getId(): ?int
     {
@@ -167,40 +164,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Hall>
-     */
-    public function getHall(): Collection
-    {
-        return $this->hall;
-    }
-
-    public function addHall(Hall $hall): self
-    {
-        if (!$this->hall->contains($hall)) {
-            $this->hall->add($hall);
-            $hall->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeHall(Hall $hall): self
-    {
-        if ($this->hall->removeElement($hall)) {
-            // set the owning side to null (unless already changed)
-            if ($hall->getUser() === $this) {
-                $hall->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function __toString()
     {
-        return $this->name;
+        return $this->name.' '.$this->firstname;
     }
+
+
+   public function getCivility(): ?string
+   {
+       return $this->civility;
+   }
+
+   public function setCivility(string $civility): self
+   {
+       $this->civility = $civility;
+
+       return $this;
+   }
+
+   public function getPhone(): ?string
+   {
+       return $this->phone;
+   }
+
+   public function setPhone(string $phone): self
+   {
+       $this->phone = $phone;
+
+       return $this;
+   }
+
+   public function getHall(): ?Hall
+   {
+       return $this->hall;
+   }
+
+   public function setHall(?Hall $hall): self
+   {
+       $this->hall = $hall;
+
+       return $this;
+   }
 
 
 }
