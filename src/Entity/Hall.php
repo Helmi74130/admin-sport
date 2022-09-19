@@ -27,9 +27,11 @@ class Hall
     private ?string $name = null;
 
     #[Vich\UploadableField(mapping: 'hall_images', fileNameProperty: 'imageName')]
+    #[Assert\NotBlank()]
     private ?File $imageFile = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: 'string' ,nullable: false)]
+    #[Assert\NotBlank()]
     private ?string $imageName = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -66,9 +68,8 @@ class Hall
     #[ORM\JoinColumn(nullable: false)]
     private ?Leader $leader = null;
 
-    #[ORM\OneToOne( inversedBy:'hall', cascade: ['persist', 'remove'])]
-    private ?User $user = null;
-
+    #[ORM\OneToOne(mappedBy: 'hall', cascade: ['persist', 'remove'])]
+    private ?LeaderHall $leaderHall = null;
 
 
     public function getId(): ?int
@@ -253,26 +254,28 @@ class Hall
         return $this->name;
     }
 
-    public function getUser(): ?User
+    public function getLeaderHall(): ?LeaderHall
     {
-        return $this->user;
+        return $this->leaderHall;
     }
 
-    public function setUser(?User $user): self
+    public function setLeaderHall(?LeaderHall $leaderHall): self
     {
         // unset the owning side of the relation if necessary
-        if ($user === null && $this->user !== null) {
-            $this->user->setHall(null);
+        if ($leaderHall === null && $this->leaderHall !== null) {
+            $this->leaderHall->setHall(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($user !== null && $user->getHall() !== $this) {
-            $user->setHall($this);
+        if ($leaderHall !== null && $leaderHall->getHall() !== $this) {
+            $leaderHall->setHall($this);
         }
 
-        $this->user = $user;
+        $this->leaderHall = $leaderHall;
 
         return $this;
     }
+
+
 
 }

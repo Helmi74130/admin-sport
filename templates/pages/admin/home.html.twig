@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+<h1 class="mt-5 ms-5">Bienvenue dans votre espace d'administration</h1>
+
+    <div class="container mb-5">
+        <div class="row justify-content-around">
+            {#<a class="mt-5 p-0 col-11 col-md-5 col-lg-5 col-xl-3 card text-decoration-none shadow" href="{{ path('app_user') }}">
+                <div>
+                    <img class="card-img-top" height="350px" src="{{ asset('images/hall/user.png') }}" alt="Card image cap">
+                    <div class="card-body bg-primary">
+                        <p class="card-text  text-center text-warning">Accéder, modifier et supprimer les comptes utilisateurs.</p>
+                    </div>
+                </div>
+            </a>#}
+            <a class="mt-5 p-0 col-11 col-md-5 col-lg-5 col-xl-3 card text-decoration-none shadow" href="{{ path('app_leader') }}">
+                <div>
+                    <img class="card-img-top" height="350px" src="{{ asset('images/hall/franchise.png') }}" alt="Card image cap">
+                    <div class="card-body bg-primary">
+                        <p class="card-text text-center text-warning">Accéder, modifier et supprimer les gérants de franchises.</p>
+                    </div>
+                </div>
+            </a>
+            <a class="mt-5 p-0 col-11 col-md-5 col-lg-5 col-xl-3 card text-decoration-none shadow" href="{{ path('app_leader_hall') }}">
+                <div>
+                    <img class="card-img-top" height="350px" src="{{ asset('images/hall/salle.png') }}" alt="Card image cap">
+                    <div class="card-body bg-primary">
+                        <p class="card-text  text-center text-warning">Accéder, modifier et supprimer les gérants de salles.</p>
+                    </div>
+                </div>
+            </a>
+            <a class="mt-5 p-0 col-11 col-md-5 col-lg-5 col-xl-3 card text-decoration-none shadow" href="{{ path('app_hall') }}">
+                <div>
+                    <img class="card-img-top" height="350px" src="{{ asset('images/hall/structure.png') }}" alt="Card image cap">
+                    <div class="card-body bg-primary">
+                        <p class="card-text  text-center text-warning">Accéder, modifier et supprimer les salles.</p>
+                    </div>
+                </div>
+            </a>
+            <a class="mt-5 p-0 col-11 col-md-5 col-lg-5 col-xl-3 card text-decoration-none shadow" href="{{ path('app_permission') }}">
+                <div>
+                    <img class="card-img-top" height="350px" src="{{ asset('images/hall/permission.png') }}" alt="Card image cap">
+                    <div class="card-body bg-primary">
+                        <p class="card-text  text-center text-warning">Accéder, modifier et supprimer les permissions des salles.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+{% endblock %}

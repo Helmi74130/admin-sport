@@ -94,7 +94,7 @@ class PermissionController extends AbstractController
                 'Votre permission a été modifiée avec succès !'
             );
 
-            return $this->redirectToRoute('app_leader');
+            return $this->redirectToRoute('app_permission');
 
         }
 

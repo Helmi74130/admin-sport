@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\HallRepository;
+use App\Repository\LeaderHallRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,15 +23,11 @@ class HomeController extends AbstractController
          * @param Request $request
          * @return Response
          */
+        //dd($this->getUser()->isIsActive());
 
-        $halls = $paginator->paginate(
-            $hallRepository->findBy(['user'=> $this->getUser()]),
-            $request->query->getInt('page', 1),
-            6
-        );
+        return $this->render('pages/home.html.twig');
 
-        return $this->render('pages/home.html.twig', [
-            'halls'=> $halls
-        ]);
+
+
     }
 }

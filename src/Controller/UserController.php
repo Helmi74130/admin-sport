@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Leader;
+use App\Entity\LeaderHall;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -82,7 +84,6 @@ class UserController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 $email= (new TemplatedEmail())
@@ -107,10 +108,54 @@ class UserController extends AbstractController
                 $user,
                 $authenticator,
                 $request
-            );*/
+            );*/ //a ne pas decommenter
+
+            //add a new leader or a new leaderhall with the user is flush
+            $name = $user->getName();
+            $civility = $user->getCivility();
+            $firstname = $user->getFirstname();
+            $phone= $user->getPhone();
+            $active = $user->isIsActive();
+            $city = $user->getCity();
+            $mail = $user->getEmail();
+
+            foreach ($user->getRoles() as $role) {
+                if ($role === 'ROLE_LEADER'){
+                    $leader= new Leader();
+                    $user = $form->getData();
+
+                    $leader->setName($name)
+                        ->setFirstname($firstname)
+                        ->setCivility($civility)
+                        ->setCity($city)
+                        ->setPhone($phone)
+                        ->setEmail($mail)
+                        ->setIsActive($active)
+                        ->setUser($user);
+
+                    $entityManager->persist($leader);
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('app_user');
+                }else{
+                    $leaderHall= new LeaderHall();
+                    $user = $form->getData();
+
+                    $leaderHall->setName($name)
+                        ->setFirstname($firstname)
+                        ->setCivility($civility)
+                        ->setCity($city)
+                        ->setPhone($phone)
+                        ->setEmail($mail)
+                        ->setIsActive(true)
+                        ->setUser($user);
+
+                    $entityManager->persist($leaderHall);
+                    $entityManager->flush();
+                    return $this->redirectToRoute('app_user');
+                }
+            }
             return $this->redirectToRoute('app_user');
-
-
         }
         return $this->render('pages/user/add.html.twig', [
             'form'=> $form->createView()

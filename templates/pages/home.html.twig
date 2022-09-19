@@ -15,7 +15,6 @@
             height: 100vh;
         }
     </style>
-
     {% if not app.user %}
         <div class="jumbotron img text-light">
             <div class="jumb">
@@ -30,82 +29,84 @@
             <div class="jumbotron mt-5 ms-3">
                 <div>
                     <h1 class="display-4 text-warning">Bienvenue sur Votre espace personnel</h1>
-                    <p class="lead ms-3">Vous pouvez dès à présent utiliser vos modules, voir vos permissions et visualiser vos salles partenaires</p>
+                    <p class="lead ms-3">Vous pouvez dès à présent voir vos salles, visualiser vos permissions et utiliser vos modules</p>
                     <hr class="my-4">
                 </div>
-                <h2>Mes salles</h2>
             </div>
-
             <main class="container">
-                {% if not halls.items is same as ([]) %}
-                <p class="col">Vous avez {{ halls.getTotalItemCount }} salle(s) au total</p>
-
-
                 <div class="row justify-content-around">
-                    {% for hall in halls %}
-                        <div class="card col-12 mt-5 p-0 bg-secondary rounded shadow {{ hall.isactive ? '' : 'opacity-50' }}">
-                            <div class="card-header d-flex justify-content-between bg-primary text-light">
-                                <div class="{{ hall.isactive ? 'text-light' : 'text-danger' }} mt-2 fs-2">
-                                    <p class="text-center">Salle: {{ hall.name }} </p>
-                                </div>
-                                <p class="text-danger">{{ hall.isActive ? '' : 'Cette salle est désactivée' }}</p>
-                            </div>
-                            <div class="card-body p-0">
-                                <div class="row card-title mt-3">
-                                    <h5 class="col-5 fs-4 ms-3"> Gérant: Mr {{ hall.leader.name}} {{ hall.leader.firstname}}</h5>
-                                    <div class="col-5 d-flex justify-content-end">
-                                        <a type="button" class="btn btn-outline-warning" href="{{ path('app_user_hall_permission', { id: hall.id }) }}">Modules de votre salle: {{ hall.name }}</a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    {% if hall.imageName == "" %}
-                                        <img alt="image de salle de sport" class="col-5 " height="400px" src="images/hall/orange bleu.jpg">
-                                    {% else %}
-                                        <img alt="image de salle de sport" class="col-5 " height="400px" src="{{ vich_uploader_asset(hall, 'imageFile') }}">
-                                    {% endif %}
-                                    <div class="card-text mt-2 pt-3 col-6 fs-4">
-                                        <div class="row">
-                                            <p class="col-4 text-primary">N° de rue:</p>
-                                            <p class="col">{{ hall.streetNumber }}</p>
-                                        </div>
-                                        <div class="row">
-                                            <p class="col-4 text-primary">Adresse: </p>
-                                            <p class="col">{{ hall.adress }}</p>
-                                        </div>
-                                        <div class="row">
-                                            <p class="col-4 text-primary">Code Postale:</p>
-                                            <p class="col">{{ hall.postalCode }}</p>
-                                        </div>
-                                        <div class="row">
-                                            <p class="col-4 text-primary">Ville: </p>
-                                            <p class="col">{{ hall.city }}</p>
-                                        </div>
-                                        <div class="row">
-                                            <p class="col-4 text-primary">Téléphone:</p>
-                                            <p class="col">{{ hall.phone }}</p>
-                                        </div>
-                                        <div class="row">
-                                            <p class="col-12 text-primary">Déscription:</p>
-                                            <p class="col12">{{ hall.shortDescription }}</p>
-                                        </div>
-                                        <p class="text-danger fs-4">{{ hall.isactive ? '' : 'Votre salle n\'est pas en activitée actuellement' }}</p>
-                                    </div>
-                                </div>
+                    <a class="mt-5 p-0 col-11 col-md-5 col-lg-5 col-xl-3 card text-decoration-none shadow" href="{{ path('app_user_hall_test') }}">
+                        <div>
+                            <img class="card-img-top" height="350px" src="{{ asset('images/hall/usersalle.png') }}" alt="Card image cap">
+                            <div class="card-body bg-primary">
+                                <p class="card-text  text-center text-warning">Accéder, modifier et supprimer les gérants de salles.</p>
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
-                </div>
-
-                </div>
-                <div class="navigation d-flex justify-content-center mt-5">
-                    {{ knp_pagination_render(halls) }}
-                    {% else %}
-                        <h1>Vous n'avez pas de salles actuellements</h1>
-                    {% endif %}
+                    </a>
+                    <a class="mt-5 p-0 col-11 col-md-5 col-lg-5 col-xl-3 card text-decoration-none shadow" href="{{ path('app_user_module') }}">
+                        <div>
+                            <img class="card-img-top" height="350px" src="{{ asset('images/hall/usermodule.png') }}" alt="Card image cap">
+                            <div class="card-body bg-primary">
+                                <p class="card-text  text-center text-warning">Accéder, modifier et supprimer les salles.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a class="mt-5 p-0 col-11 col-md-5 col-lg-5 col-xl-3 card text-decoration-none shadow" href="{{ path('app_user_permission') }}">
+                        <div>
+                            <img class="card-img-top" height="350px" src="{{ asset('images/hall/userperm.png') }}" alt="Card image cap">
+                            <div class="card-body bg-primary">
+                                <p class="card-text text-center text-warning">Accéder, modifier et supprimer les gérants de franchises.</p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </main>
-            {{ dump() }}
     {% endif %}
-
 {% endblock %}
+
+{#<div class="card col-12 mt-5 p-0 bg-secondary rounded shadow {{ hall.isactive ? '' : 'opacity-50' }}">
+    <div class="card-header d-flex justify-content-between bg-primary text-light">
+        <div class="{{ hall.isactive ? 'text-light' : 'text-danger' }} mt-2 fs-2">
+            <p class="text-center">Salle: {{ hall.name }} </p>
+        </div>
+        <p class="text-danger">{{ hall.isActive ? '' : 'Cette salle est désactivée' }}</p>
+    </div>
+    <div class="card-body p-0">
+        <div class="row card-title mt-3">
+            <h5 class="col-5 fs-4 ms-3"> Gérant: Mr {{ hall.leader.name}} {{ hall.leader.firstname}}</h5>
+            <div class="col-5 d-flex justify-content-end">
+                <a type="button" class="btn btn-outline-warning" href="{{ path('app_user_hall_permission', { id: hall.id }) }}">Modules de votre salle: {{ hall.name }}</a>
+            </div>
+        </div>
+        <div class="row">
+            <img alt="image de salle de sport" class="col-5 " height="400px" src="{{ vich_uploader_asset(hall, 'imageFile') }}">
+            <div class="card-text mt-2 pt-3 col-6 fs-4">
+                <div class="row">
+                    <p class="col-4 text-primary">N° de rue:</p>
+                    <p class="col">{{ hall.streetNumber }}</p>
+                </div>
+                <div class="row">
+                    <p class="col-4 text-primary">Adresse: </p>
+                    <p class="col">{{ hall.adress }}</p>
+                </div>
+                <div class="row">
+                    <p class="col-4 text-primary">Code Postale:</p>
+                    <p class="col">{{ hall.postalCode }}</p>
+                </div>
+                <div class="row">
+                    <p class="col-4 text-primary">Ville: </p>
+                    <p class="col">{{ hall.city }}</p>
+                </div>
+                <div class="row">
+                    <p class="col-4 text-primary">Téléphone:</p>
+                    <p class="col">{{ hall.phone }}</p>
+                </div>
+                <div class="row">
+                    <p class="col-12 text-primary">Déscription:</p>
+                    <p class="col12">{{ hall.shortDescription }}</p>
+                </div>
+                <p class="text-danger fs-4">{{ hall.isactive ? '' : 'Votre salle n\'est pas en activitée actuellement' }}</p>
+            </div>
+        </div>
+    </div>
+</div>#}

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserPermissionController extends AbstractController
 {
-    #[Route('/utilisateur/permission', name: 'app_user_permission')]
+    #[Route('/permissions', name: 'app_user_permission')]
     public function index(HallRepository $hallRepository, PaginatorInterface $paginator, Request $request): Response
     {
         /**
@@ -22,13 +22,16 @@ class UserPermissionController extends AbstractController
          * @return Response
          */
 
-        $permissions = $paginator->paginate(
-            $hallRepository->findBy(['user'=> $this->getUser()]),
+        $halls = $paginator->paginate(
+            $hallRepository->findAll(),
             $request->query->getInt('page', 1),
             6
         );
+        $user = $this->getUser();
+
         return $this->render('pages/user_permission/home.html.twig', [
-            'permissions' => $permissions,
+            'halls'=> $halls,
+            'user' => $user
         ]);
     }
 }

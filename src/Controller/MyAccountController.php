@@ -18,9 +18,12 @@ class MyAccountController extends AbstractController
          * @return Response
          */
 
-        $halls = $hallRepository->findBy(['user'=> $this->getUser()]);
+        $halls =  $hallRepository->findAll();
+        $user = $this->getUser();
+
         return $this->render('pages/my_account/home.html.twig', [
-            'halls'=> $halls
+            'halls'=> $halls,
+            'user' => $user
         ]);
     }
 }

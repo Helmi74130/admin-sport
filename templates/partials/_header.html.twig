@@ -8,16 +8,10 @@
             <ul class="navbar-nav me-auto">
                 {% if not app.user %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_leader') }}">Gérants Franchises</a>
+                        <a class="nav-link" href="{{ path('app_user') }}">Compte utilisateurs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_user') }}">Gérants Salles</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_hall') }}">Salles</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_permission') }}">Permissions</a>
+                        <a class="nav-link" href="{{ path('app_admin') }}">Administration</a>
                     </li>
                     <li class="nav-item">
                         <a type="button" class="nav-link btn btn-success text-light" href="{{ path('app_login') }}">Connexion</a>
@@ -25,16 +19,10 @@
                 {% endif %}
                 {% if app.user %}
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ path('app_user_module') }}">Mes modules</a>
+                        <a class="nav-link" href="{{ path('app_home') }}">Mon espace</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_user_permission') }}">Mes permissions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_user_hall_test') }}">Mes salles</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_contact') }}">Contact</a>
+                        <a class="nav-link" href="{{ path('app_contact') }}">Nous Contacter</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_my_account') }}">Parametres</a>

@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -20,46 +21,57 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
         $builder
             ->add('roles', ChoiceType::class, [
-                'choices' => [
-                    'Gérant de salle' => 'ROLE_USER'
-                ],
-                'expanded'  => true, // liste déroulante
-                'multiple'  => true, // choix multiple
-                'label' => 'Rôle'
-            ])
+                    'required' => true,
+                    'choices' => [
+                        'GERANT DE FRANCHISE' => 'ROLE_LEADER',
+                        'GERANT DE SALLE' => 'ROLE_USER'
+                    ],
+                    'expanded' => true, // liste déroulante
+                    'multiple' => false, // choix multiple
+                    'label' => 'Rôle *']
+            )
             ->add('civility', ChoiceType::class, [
-                'label' => 'Civilité',
+                'required' => true,
+                'label' => 'Civilité *',
                 'choices'  => [
                     'Mme' => 'Mme',
                     'Mr' => 'Mr',
                 ]
             ])
+            ->add('isActive', null, [
+                'label'    => 'En activité ?',
+            ])
+            ->add('city', TextType::class,[
+                'label' => 'Ville'
+            ])
             ->add('firstname', TextType::class, [
-                'label' => 'Prénom',
+                'required' => true,
+                'label' => 'Prénom *',
                 'attr' => [
                     'minlength' => '2',
                     'maxlength' => '50'
                 ]
             ])
             ->add('name', TextType::class, [
-                'label' => 'Nom',
+                'required' => true,
+                'label' => 'Nom *',
                 'attr' => [
                     'minlength' => '2',
                     'maxlength' => '50'
                 ]
             ])
             ->add('phone', TelType::class, [
+                'required' => true,
                 'label'=> 'Tél. *',
                 'attr' => [
                     'minlength' => '10',
                     'maxlength' => '15'
                 ]
-            ])
-        ;
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            ]);
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $user = $event->getData();
             $form = $event->getForm();
 
@@ -88,8 +100,18 @@ class UserType extends AbstractType
                 ;
             }
         });
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+        $builder->get('roles')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($rolesArray) {
+                    // transform the array to a string
+                    return count($rolesArray) ? $rolesArray[0] : null;
+                },
+                function ($rolesString) {
+                    // transform the string back to an array
+                    return [$rolesString];
+                }
+            ));
+       $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $user = $event->getData();
             $form = $event->getForm();
 

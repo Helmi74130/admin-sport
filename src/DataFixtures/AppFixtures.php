@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Contact;
 use App\Entity\Hall;
 use App\Entity\Leader;
+use App\Entity\LeaderHall;
 use App\Entity\Permission;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -19,79 +20,83 @@ class AppFixtures extends Fixture
     {
         $faker = Faker\Factory::create('fr_FR');
 
-        //Users
-        $users = [];
-        for($a=0; $a < 5; $a++){
-            $user= new User();
-            $user->setFirstname($faker->lastName)
-                ->setName($faker->lastName)
-                ->setEmail($faker->email)
-                ->setRoles(['ROLE_USER'])
-                ->setPassword('');
-            $users[] = $user;
-            $manager->persist($user);
-        }
 
-        // Halls
-         /*$halls =[];
-         for ($j=0; $j <15; $j++){
 
-             $hall = new Hall();
 
-             $hall->setName($faker->lastName);
-             $hall->setStreetNumber($faker->numberBetween($min = 1, $max = 200));
-             $hall->setAdress($faker->address);
-             $hall->setCity($faker->city);
-             $hall->setIsactive(rand(0,1));
-             $hall->setPhone($faker->e164PhoneNumber);
-             $hall->setPostalCode($faker->postcode);
-             $hall->setShortDescription($faker->sentence($nbWords = 15, $variableNbWords = true));
-                 //->setUser($users[mt_rand(0, count($users)-1)]);
+        /*for ($j=0; $j <10; $j++){
 
-             $halls[] = $hall;
+            for($a=0; $a <= 2; $a++){
+                $user= new User();
+                $user->setFirstname($faker->lastName)
+                    ->setName($faker->lastName)
+                    ->setEmail($faker->email)
+                    ->setRoles(['ROLE_USER'])
+                    ->setPhone('0174545415')
+                    ->setCivility('Mr')
+                    ->setCity($faker->city)
+                    ->setIsActive(rand(0,1))
+                    ->setPassword('123');
 
-             $manager->persist($hall);
-         }*/
+                $manager->persist($user);
+            }
 
-        //leader
-        $leaders = [];
-        for ($u=0; $u < 10; $u++){
             $leader = new Leader();
+                //Leader
+                $leader->setName($faker->lastName)
+                    ->setFirstname($faker->lastName)
+                    ->setCity($faker->city)
+                    ->setCivility('Mr')
+                    ->setEmail($faker->email)
+                    ->setPhone($faker->e164PhoneNumber)
+                    ->setUser($user)
+                    ->setIsActive(rand(0,1));
 
-            $leader->setName($faker->lastName)
+                $manager->persist($leader);
+
+
+            $leaderHall =new LeaderHall();
+
+            $leaderHall->setName($faker->lastName)
                 ->setFirstname($faker->lastName)
+                ->setCivility('Mr')
                 ->setCity($faker->city)
-                ->setMail($faker->email)
+                ->setEmail($faker->email)
                 ->setPhone($faker->e164PhoneNumber)
-                ->setCommercialPhone($faker->e164PhoneNumber)
-                ->setIsActive(rand(0,1));
+                ->setIsActive(rand(0,1))
+                ->setUser($user);
 
-                $leaders[] = $leader;
+                // Halls
+                $hall = new Hall();
 
-            $manager->persist($leader);
-        }
+                $hall->setName($faker->lastName)
+                    ->setStreetNumber($faker->numberBetween($min = 1, $max = 200))
+                    ->setAdress($faker->address)
+                    ->setCity($faker->city)
+                    ->setIsactive(rand(0,1))
+                    ->setPhone($faker->e164PhoneNumber)
+                    ->setPostalCode($faker->postcode)
+                    ->setShortDescription($faker->sentence($nbWords = 15, $variableNbWords = true))
+                    ->setLeaderHall($leaderHall)
+                    ->setLeader($leader);
 
+                $manager->persist($hall);
 
+                    // Permissions
+                    $permission = new Permission();
 
-        // Permissions
-        /*for ($i=0; $i <10; $i++){
-            $permission = new Permission();
+                    $permission->setIsMembersAdd(rand(0,1))
+                        ->setIsMembersRead(rand(0,1))
+                        ->setIsMembersStatistiqueRead(rand(0,1))
+                        ->setIsMembersWrite(rand(0,1))
+                        ->setIsPaymentSchedulesAdd(rand(0,1))
+                        ->setIsSellDrinks(rand(0,1))
+                        ->setIsPaymentSchedulesWrite(rand(0,1))
+                        ->setHall($hall);
 
-            $permission->setIsMembersAdd(rand(0,1));
-            $permission->setIsMembersRead(rand(0,1));
-            $permission->setIsMembersStatistiqueRead(rand(0,1));
-            $permission->setIsMembersWrite(rand(0,1));
-            $permission->setIsPaymentSchedulesAdd(rand(0,1));
-            $permission->setIsSellDrinks(rand(0,1));
-            $permission->setIsPaymentSchedulesWrite(rand(0,1));
-
-
-            $manager->persist($permission);
-
-
+                    $manager->persist($permission);
         }*/
 
-        for ($i=0; $i<5; $i++){
+       /* for ($i=0; $i<5; $i++){
             $contact= new Contact;
 
             $contact->setEmail($faker->email)
@@ -102,7 +107,7 @@ class AppFixtures extends Fixture
 
             $manager->persist($contact);
 
-        }
+        }*/
 
         $manager->flush();
     }

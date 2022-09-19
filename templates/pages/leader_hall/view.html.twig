@@ -1,9 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Salles de {{ leaders.name }} {{ leaders.firstname }}{% endblock %}
+{% block title %}Gérants de salles{% endblock %}
 
 {% block body %}
-    <h1 class="m-5">Gérant {{ leaders.user.civility}} {{ leaders.user.name }} {{ leaders.user.firstname }}</h1>
+    {% if leaderHall.hall is null %}
+    <h1 class="m-5">{{ leaderHall.civility}} {{ leaderHall.name }} {{ leaderHall.firstname }} ne possède aucune salle pour le moment!
+    {% else %}
+
+    <h1 class="m-5">Gérant {{ leaderHall.civility}} {{ leaderHall.name }} {{ leaderHall.firstname }}</h1>
     <div class="container">
 
         {% for message in app.flashes('success-salle') %}
@@ -12,112 +16,91 @@
             </div>
         {% endfor %}
         <div class="row justify-content-around mb-5">
-            {% for hall in halls %}
-                <div class=" col-12 mt-5 p-0 row bg-secondary rounded shadow {{ hall.isactive ? '' : 'opacity-75' }}">
+                <div class=" col-12 mt-5 p-0 row bg-secondary rounded shadow {{ leaderHall.isactive ? '' : 'opacity-75' }}">
                     <div class="row p-0 col-12 bg-primary text-light">
-                        <div class="{{ hall.isactive ? 'text-light' : 'text-danger' }} fs-4 col-12">
-                            <p class="text-center">{{ hall.isactive ? 'Salle en activitée:' : 'Salle en inactivitée: ' }} {{ hall.name|title }} </p>
+                        <div class="{{ leaderHall.isactive ? 'text-light' : 'text-danger' }} fs-4 col-12">
+                            <p class="text-center">{{ leaderHall.isactive ? 'Salle en activitée:' : 'Salle en inactivitée: ' }} {{ leaderHall.hall.name|title }} </p>
                         </div>
-                        {% if hall.permissions is not same as null %}
                             <div class="row justify-content-around col-12 m-1">
-                                {% for permission in permissions %}
-                                    {% if permission.hall.name == hall.name %}
-                                        <a href="{{ path('app_editer', {id: permission.id}) }}" type="button" class="btn btn-outline-warning rounded btn-sm col-3">Editer les permissions</a>
-                                    {% endif %}
-                                {% endfor %}
-                                <a href="{{ path('app_salle_editer', {id: hall.id}) }}" type="button" class="btn btn-outline-warning  rounded btn-sm col-3" >Editer la salle</a>
-                                <a type="button" class="btn btn-danger rounded btn-sm col-3" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hall.id }}">Supprimer</a>
+                                <a href="{{ path('app_editer', {id: leaderHall.hall.permissions.id}) }}" type="button" class="btn btn-outline-warning rounded btn-sm col-3">Editer les permissions</a>
+                                <a href="{{ path('app_salle_editer', {id: leaderHall.hall.id}) }}" type="button" class="btn btn-outline-warning  rounded btn-sm col-3" >Editer la salle</a>
+                                <a type="button" class="btn btn-danger rounded btn-sm col-3" data-bs-toggle="modal" data-bs-target="#deleteModal{{ leaderHall.id }}">Supprimer</a>
                             </div>
-                        {% endif %}
                     </div>
                     <div class="m-3 col-12">
                         <div class="row justify-content-around">
                             <div class="card-text mt-2 col-lg-5 col-12 fs-4">
                                 <div class="row">
                                     <p class="col-4 text-primary">Adresse: </p>
-                                    <p class="col">{{ hall.streetNumber }} {{ hall.adress }} {{ hall.postalCode }} {{ hall.city }}</p>
+                                    <p class="col">{{ leaderHall.hall.streetNumber }} {{ leaderHall.hall.adress }} {{ leaderHall.hall.postalCode }} {{ leaderHall.hall.city }}</p>
                                 </div>
                                 <div class="row">
                                     <p class="col-4 text-primary">Téléphone:</p>
-                                    <p class="col">{{ hall.phone }}</p>
+                                    <p class="col">{{ leaderHall.hall.phone }}</p>
                                 </div>
                                 <div class="row">
                                     <p class="col-12 text-primary">Déscription:</p>
-                                    <p class="col12">{{ hall.shortDescription }}</p>
+                                    <p class="col12">{{ leaderHall.hall.shortDescription }}</p>
                                 </div>
-                                <p class="text-danger fs-4">{{ hall.isactive ? '' : 'Cette salle n\'est pas en activitée actuellement' }}</p>
+                                <p class="text-danger fs-4">{{ leaderHall.hall.isactive ? '' : 'Cette salle n\'est pas en activitée actuellement' }}</p>
                             </div>
-                            {% if hall.permissions is same as null %}
-                                <div class="col-lg-5 col-12">
-                                    <h3 class="m-5 text-danger text-center">Attention cette salle n'a pas de permission veuillez les ajouter</h3>
-                                    <div class="d-flex justify-content-end mb-3 me-3 mt-3">
-                                        <a href=" {{ path('app_ajouter') }}" type="button" class="btn btn-outline-success rounded btn-sm me-4">Ajouter une permission</a>
-                                        <a href="{{ path('app_salle_editer', {id: hall.id}) }}" type="button" class="btn btn-outline-primary rounded btn-sm me-4" >Editer la salle</a>
-                                        <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hall.id }}">Supprimer la salle</a>
-                                    </div>
-                                </div>
-                            {% else %}
                                 <div class="col-lg-6 col-12 mb-5">
                                     <div class="card-text mt-3 row justify-content-end">
                                         <div class="col-10 mt-2">
                                             <div class="form-check disabled">
                                                 <label class="form-check-label" for="flexCheckChecked">Vendre des boissons</label>
-                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{  hall.permissions.isSellDrinks  ? 'checked=""' : '' }} >
+                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{  leaderHall.hall.permissions.isSellDrinks  ? 'checked=""' : '' }} >
                                             </div>
                                         </div>
                                         <div class="col-10 mt-2">
                                             <div class="form-check disabled">
                                                 <label class="form-check-label" for="flexCheckChecked">Modifier le statut d'un membre</label>
-                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isMembersWrite ? 'checked=""' : '' }} >
+                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ leaderHall.hall.permissions.isMembersWrite ? 'checked=""' : '' }} >
                                             </div>
                                         </div>
                                         <div class="col-10 mt-2">
                                             <div class="form-check disabled">
                                                 <label class="form-check-label" for="flexCheckChecked">Accès au statut d'un membre</label>
-                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isMembersRead ? 'checked=""' : '' }} >
+                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ leaderHall.hall.permissions.isMembersRead ? 'checked=""' : '' }} >
                                             </div>
                                         </div>
                                         <div class="col-10 mt-2">
                                             <div class="form-check disabled">
                                                 <label class="form-check-label" for="flexCheckChecked">Ajouter un membre</label>
-                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isMembersAdd ? 'checked=""' : '' }} >
+                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ leaderHall.hall.permissions.isMembersAdd ? 'checked=""' : '' }} >
                                             </div>
                                         </div>
                                         <div class="col-10 mt-2">
                                             <div class="form-check disabled">
                                                 <label class="form-check-label" for="flexCheckChecked">Voir les statistiques d'un membre</label>
-                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isMembersStatistiqueRead ? 'checked=""' : '' }} >
+                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ leaderHall.hall.permissions.isMembersStatistiqueRead ? 'checked=""' : '' }} >
                                             </div>
                                         </div>
                                         <div class="col-10 mt-2">
                                             <div class="form-check disabled">
                                                 <label class="form-check-label" for="flexCheckChecked">Modifier les échéanciés de paiement </label>
-                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isPaymentSchedulesWrite ? 'checked=""' : '' }} >
+                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ leaderHall.hall.permissions.isPaymentSchedulesWrite ? 'checked=""' : '' }} >
                                             </div>
                                         </div>
                                         <div class="col-10 mt-2">
                                             <div class="form-check disabled">
                                                 <label class="form-check-label" for="flexCheckChecked">Accès aux échéanciés de paiement </label>
-                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ hall.permissions.isPaymentSchedulesAdd ? 'checked=""' : '' }} >
+                                                <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ leaderHall.hall.permissions.isPaymentSchedulesAdd ? 'checked=""' : '' }} >
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
-            {% endfor %}
         </div>
     </div>
-
-    {% for hall in halls %}
         <!-- Modal delete-->
-        <div class="modal fade" id="deleteModal{{ hall.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal fade" id="deleteModal{{ leaderHall.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Voulez-vous supprimer la salle: {{ hall.name }}?</h5>
+                        <h5 class="modal-title" id="deleteModalLabel">Voulez-vous supprimer la salle: {{ leaderHall.name }}?</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-danger">
@@ -126,10 +109,10 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                        <a href="{{ path('app_salle_supprimer', {id: hall.id}) }}" type="button" class="btn btn-danger">Supprimer</a>
+                        <a href="{{ path('app_salle_supprimer', {id: leaderHall.hall.id}) }}" type="button" class="btn btn-danger">Supprimer</a>
                     </div>
                 </div>
             </div>
         </div>
-    {% endfor %}
+    {% endif %}
 {% endblock %}

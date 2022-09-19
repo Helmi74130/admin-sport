@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueEntity('email')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Cette adresse e-mail est déja associée à un compte')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -24,7 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length(min:2, max:180)]
     private ?string $email = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: false)]
     private array $roles = [];
 
     /**
@@ -36,25 +36,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank()]
     #[Assert\Length(min:2, max:50)]
-    private ?string $firstname = null;
+    protected ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank()]
     #[Assert\Length(min:2, max:50)]
-    private ?string $name = null;
+    protected ?string $name = null;
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
 
     #[ORM\Column(length: 5)]
-    private ?string $civility = null;
+    protected ?string $civility = null;
 
     #[ORM\Column(length: 15)]
     private ?string $phone = null;
 
-    #[ORM\OneToOne( mappedBy:'user', cascade: ['persist', 'remove'])]
-    private ?Hall $hall = null;
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private ?Leader $leader = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $city = null;
+
+
+    #[ORM\Column]
+    private ?bool $isActive = null;
+
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private ?LeaderHall $leaderHall = null;
+
 
     public function getId(): ?int
     {
@@ -167,7 +178,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString()
     {
-        return $this->name.' '.$this->firstname;
+        foreach ($this->roles as $role) {
+            if($role === 'ROLE_USER'){
+                $salle = 'Gérant de Salle';
+            }else{
+                $salle = 'Gérant de Franchise';
+            }
+        }
+        return $this->civility.' '.$this->name.' '.$this->firstname;
     }
 
 
@@ -195,14 +213,52 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
        return $this;
    }
 
-   public function getHall(): ?Hall
+
+   public function getLeader(): ?Leader
    {
-       return $this->hall;
+       return $this->leader;
    }
 
-   public function setHall(?Hall $hall): self
+   public function setLeader(?Leader $leader): self
    {
-       $this->hall = $hall;
+       $this->leader = $leader;
+
+       return $this;
+   }
+
+   public function getCity(): ?string
+   {
+       return $this->city;
+   }
+
+   public function setCity(string $city): self
+   {
+       $this->city = $city;
+
+       return $this;
+   }
+
+
+   public function isIsActive(): ?bool
+   {
+       return $this->isActive;
+   }
+
+   public function setIsActive(bool $isActive): self
+   {
+       $this->isActive = $isActive;
+
+       return $this;
+   }
+
+   public function getLeaderHall(): ?LeaderHall
+   {
+       return $this->leaderHall;
+   }
+
+   public function setLeaderHall(?LeaderHall $leaderHall): self
+   {
+       $this->leaderHall = $leaderHall;
 
        return $this;
    }

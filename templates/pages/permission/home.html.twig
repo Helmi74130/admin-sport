@@ -17,13 +17,12 @@
         </div>
         <div class="row justify-content-around">
             {% for permission in permissions %}
-                <div class="card col-5 mt-4 p-0 rounded shadow {{ permission.hall.isactive ? '' : 'opacity-50' }}">
+                <div class="card col-lg-5 col-11 mt-4 p-0 rounded shadow {{ permission.hall.isactive ? '' : 'opacity-50' }}">
                     <div class="card-header d-flex justify-content-between bg-primary">
                         <h5 class=" mt-2 lh-lg {{ permission.hall.isactive ? 'text-light' : 'text-danger' }}">Salle: {{ permission.hall.name }} </h5>
                         <p class="text-danger">{{ permission.hall.isActive ? '' : 'Cette salle est désactivée' }}</p>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title fs-3 border-bottom">Id: {{ permission.id }}</h5>
                         <div class="card-text mt-3 row justify-content-center">
                             <div class="col-10 mt-2">
                                 <div class="form-check disabled">

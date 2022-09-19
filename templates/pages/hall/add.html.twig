@@ -5,30 +5,35 @@
 {% block body %}
     {{ form_start(form) }}
     <h1 class="m-5">Ajouter une salle</h1>
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger mt-4">
+            {{ message }}
+        </div>
+    {% endfor %}
 
     <div class="container">
-        <div class="row text-warning fs-1 bg-primary p-5 shadow">
-            <h2 class="text-center text-danger fs-2">Avant de continuer veuillez lier la salle avec les gérants</h2>
+        <div class="row text-warning fs-4 bg-primary p-3 shadow">
+            <h2 class="text-center text-danger fs-4">Avant de continuer veuillez lier la salle avec les gérants</h2>
             <p>{{ form_row(form.leader) }}</p>
-            <p>{{ form_row(form.user) }}</p>
+            <p>{{ form_row(form.leaderHall) }}</p>
         </div>
         <div class="col-3 text-center mt-3 form-check form-switch fs-2">{{ form_row(form.isactive) }}</div>
         <div class="row justify-content-around shadow">
-            <div class="col-5 text-center mt-3">{{ form_row(form.name) }}</div>
-            <div class="col-5 text-center mt-3">{{ form_row(form.streetNumber) }}</div>
-            <div class="col-5 text-center mt-3">{{ form_row(form.adress) }}</div>
-            <div class="col-5 text-center mt-3">{{ form_row(form.city) }}</div>
-            <div class="col-5 text-center mt-3">{{ form_row(form.phone) }}</div>
-            <div class="col-5 text-center mt-3">{{ form_row(form.postalCode) }}</div>
-            <div class="col-5 text-center mt-3">{{ form_row(form.imageFile) }}</div>
-            <div class="col-5 text-center mt-3">{{ form_row(form.shortDescription) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.name) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.streetNumber) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.adress) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.city) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.phone) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.postalCode) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.imageFile) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.shortDescription) }}</div>
         </div>
         <button class="btn btn-outline-warning m-5 align-self-end">Ajouter</button>
     </div>
 
+
+
     {{ form_end(form) }}
-
-
 
     {{ dump() }}
 {% endblock %}

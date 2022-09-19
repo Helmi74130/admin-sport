@@ -14,31 +14,28 @@
     </div>
     <div class="container">
         <div class="row justify-content-around">
-            <div class="col-5 text-center mb-5 form-check form-switch border-bottom">
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
                 <p>{{ form_widget(form.isSellDrinks) }}</p>
             </div>
-            <div class="col-5 text-center mb-5 form-check form-switch border-bottom">
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
                 <p>{{ form_row(form.isMembersWrite) }}</p>
             </div>
-            <div class="col-5 text-centeborderr mb-5 form-check form-switch border-bottom">
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
                 <p class="">{{ form_row(form.isMembersRead) }}</p>
             </div>
-            <div class="col-5 text-center mb-5 form-check form-switch border-bottom">
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
                 <p>{{ form_row(form.isMembersAdd) }}</p>
             </div>
-            <div class="col-5 text-center mb-5 form-check form-switch border-bottom">
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
                 <p>{{ form_row(form.isMembersStatistiqueRead) }}</p>
             </div>
-            <div class="col-5 text-center mb-5 form-check form-switch border-bottom">
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
                 <p>{{ form_row(form.isPaymentSchedulesWrite) }}</p>
             </div>
-            <div class="col-5 text-center mb-5 form-check form-switch border-bottom">
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
                 <p>{{ form_row(form.isPaymentSchedulesAdd) }}</p>
             </div>
         </div>
     </div>
-
-    {{ dump() }}
     {{ form_end(form) }}
-
 {% endblock %}

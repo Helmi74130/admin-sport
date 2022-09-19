@@ -26,34 +26,43 @@ class UserHallController extends AbstractController
          */
 
         $halls = $paginator->paginate(
-            $hallRepository->findBy(['user'=> $this->getUser()]),
+            $hallRepository->findAll(),
             $request->query->getInt('page', 1),
             6
         );
+        $user = $this->getUser();
+
         return $this->render('pages/user_hall/hallmodule.html.twig', [
-            'halls'=> $halls
+            'halls'=> $halls,
+            'user' => $user
         ]);
     }
 
-    #[Route('/salle/user', name: 'app_user_hall_test', methods: ['GET'])]
+    #[Route('/salles', name: 'app_user_hall_test', methods: ['GET'])]
     public function salle(HallRepository $hallRepository, PaginatorInterface $paginator, Request $request): Response
     {
         /**
-         * This controller display all permissions
+         * This controller display hall for leaders only
          * @param HallRepository $hallRepository
          * @param PaginatorInterface $paginator
          * @param Request $request
          * @return Response
          */
 
-        $halls = $hallRepository->findBy(['user'=> $this->getUser()]);
+        $halls = $paginator->paginate(
+            $hallRepository->findAll(),
+            $request->query->getInt('page', 1),
+            6
+        );
+        $user = $this->getUser();
 
         return $this->render('pages/user_hall/hall.html.twig', [
-            'halls'=> $halls
+            'halls'=> $halls,
+            'user' => $user
         ]);
     }
 
-    #[Route('/utilisateur/salles/{id}', name: 'app_user_hall_permission')]
+    #[Route('/salles/{id}', name: 'app_user_hall_permission')]
     public function modules($id, ManagerRegistry $doctrine, Request $request): Response
     {
         /**
@@ -65,7 +74,6 @@ class UserHallController extends AbstractController
          */
 
         $hall = $doctrine->getRepository(Hall::class)->find($id);
-        //dd($hall);
 
         return $this->render('pages/user_hall/module.html.twig', [
             'hall' => $hall,

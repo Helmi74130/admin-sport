@@ -1,5 +1,111 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Gérant franchise{% endblock %}
+
+{% block body %}
+{{ dump() }}
+    <div class="d-flex justify-content-around mt-5">
+        <h1>Listes des gérants de franchise</h1>
+        <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un gérant</a>
+    </div>
+    <div class="row justify-content-between m-5">
+        <p class="col">Il y a {{ leaders.getTotalItemCount }} item(s) au total</p>
+    </div>
+    {% if not leaders.items is same as ([]) %}
+        <div class="container">
+            <div class="row justify-content-around">
+                <div class="col-12">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr class="table-primary text-center">
+                            <th scope="col">Nom et prénom</th>
+                            <th scope="col">E-mail</th>
+                            <th scope="col">Ville</th>
+                            <th scope="col">Téléphone</th>
+                            <th scope="col">Active</th>
+                            <th scope="col">Apperçu</th>
+                            <th scope="col">Modifier</th>
+                            <th scope="col">Supprimer</th>
+                        </tr>
+                        </thead>
+                        {% for leader in leaders %}
+                            <tbody class="text-center">
+                            <tr class="{{ (leader.isActive) ? 'table-light' : 'table-warning' }}">
+                                <td>{{ leader.user.civility }} {{ leader.user.name }} {{ leader.user.firstname }}</td>
+                                <td>{{ leader.user.email }}</td>
+                                <td>{{ leader.user.city }}</td>
+                                <td>{{ leader.user.phone }}</td>
+                                <td>{{ (leader.user.isActive) ? 'Oui' : 'Non' }}</td>
+                                <td><a href="{{ path('app_leader_view',{id: leader.id}) }}" type="button" class="text-info">Salles</a></td>
+                                <td><a type="button" class="" data-bs-toggle="modal" data-bs-target="#editModal{{ leader.user.id }}">Modifier</a></td>
+                                <td><a type="button" class="text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ leader.user.id }}">Supprimer</a></td>
+                            </tr>
+                            </tbody>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation d-flex justify-content-center mt-5">
+        {{ knp_pagination_render(leaders) }}
+    {% else %}
+        <h2 class="mt-5">Il n'y a rien dans la liste actuellement pour commencer ajouter des gérants</h2>
+        <a class="btn btn-outline-success" href="{{ path('app_ajouter_leader') }}">Ajouter un gérant</a>
+    {% endif %}
+    </div>
+    {% for leader in leaders %}
+        <!-- Modal edit-->
+        <div class="modal fade" id="editModal{{ leader.user.id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Voulez-vous modifier le gérant: {{ leader.user.name }} {{ leader.user.firstname }}?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-warning">
+                        <p>Attention toutes modifications est définitive!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <a href=" {{ path('app_user_edit', {id: leader.user.id}) }}" type="button" class="btn btn-warning">Modifier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal delete-->
+        <div class="modal fade" id="deleteModal{{ leader.user.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Voulez-vous supprimer le gérant: {{ leader.user.name }} {{ leader.user.firstname }}?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <p>Attention toutes supressions est définitive!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <a href="{{ path('app_user_delete', {id: leader.user.id}) }}" type="button" class="btn btn-danger">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+{#
+{% extends 'base.html.twig' %}
+
 {% block title %}Gérants de Franchises{% endblock %}
 
 {% block body %}
@@ -22,15 +128,11 @@
             {% for leader in leaders %}
                 <div class="card col-5 mt-4 p-0 rounded shadow {{ leader.isActive ? '' : 'opacity-50' }}">
                     <div class="card-header d-flex justify-content-between bg-primary">
-                        <h5 class="fs-3 mt-2 lh-lg {{ leader.isActive ? 'text-light' : 'text-danger' }}">{{ leader.civility }} {{ leader.name }} {{ leader.firstname}}</h5>
+                        <h5 class="fs-3 mt-2 lh-lg {{ leader.isActive ? 'text-light' : 'text-danger' }}">{{ leader.user.civility }} {{ leader.user.name }} {{ leader.user.firstname}}</h5>
                         <p class="{{ leader.isActive ? 'text-success' : 'text-danger' }}">{{ leader.isActive ? 'En activité' : 'Ce gérant est désactivé' }}</p>
                     </div>
                     <div class="card-body">
                             <div class="card-text pt-2 text-primary">
-                                <div class="row">
-                                    <p class="col-4">E-mail:</p>
-                                    <p class="col">{{ leader.email }}</p>
-                                </div>
                                 <div class="row ">
                                     <p class="col-4">Ville</p>
                                     <p class="col">{{ leader.city }}</p>
@@ -110,3 +212,4 @@
         </div>
     {% endfor %}
 {% endblock %}
+#}

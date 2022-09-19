@@ -6,6 +6,7 @@ use App\Entity\Hall;
 use App\Entity\Permission;
 use App\Form\HallType;
 use App\Repository\HallRepository;
+use App\Repository\LeaderHallRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,7 +39,7 @@ class HallController extends AbstractController
     }
 
     #[Route('/salle/ajouter', name: 'app_salle_ajouter', methods: ['GET', 'POST'])]
-    public function add(Request $request, EntityManagerInterface $manager) :Response
+    public function add(Request $request, EntityManagerInterface $manager, LeaderHallRepository $leaderHallRepository) :Response
     {
         /**
          * This controller show a form for create hall
@@ -52,41 +53,46 @@ class HallController extends AbstractController
         $form = $this->createForm(HallType::class, $hall);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()){
+        if ($form->isSubmitted()) {
+            //this condition checks that the leaderHall does not have a hall
+            if ($hall->getleaderHall()->getHall()->getId() == null) {
+                $permission = new Permission();
 
+                $permission->setIsMembersAdd(1);
+                $permission->setIsMembersRead(1);
+                $permission->setIsMembersStatistiqueRead(1);
+                $permission->setIsMembersWrite(1);
+                $permission->setIsPaymentSchedulesAdd(1);
+                $permission->setIsSellDrinks(1);
+                $permission->setIsPaymentSchedulesWrite(1);
+                $permission->setHall($hall);
+                $manager->persist($permission);
 
-            //test
+                $hall = $form->getData();
 
-            $permission = new Permission();
+                $manager->persist($hall);
+                $manager->flush();
 
-            $permission->setIsMembersAdd(1);
-            $permission->setIsMembersRead(1);
-            $permission->setIsMembersStatistiqueRead(1);
-            $permission->setIsMembersWrite(1);
-            $permission->setIsPaymentSchedulesAdd(1);
-            $permission->setIsSellDrinks(1);
-            $permission->setIsPaymentSchedulesWrite(1);
-            $permission->setHall($hall);
-            $manager->persist($permission);
-            //
+                $this->addFlash(
+                    'success-salle',
+                    'Votre salle a été ajoutée avec succès !'
+                );
 
-            $hall = $form->getData();
-
-            $manager->persist($hall);
-            $manager->flush();
-
-
-            $this->addFlash(
-                'success-salle',
-                'Votre salle a été ajoutée avec succès !'
-            );
-
-            return $this->redirectToRoute('app_hall');
+                return $this->redirectToRoute('app_hall');
+            }else{
+                $this->addFlash(
+                    'error',
+                    'Ce gérant possède déja une salle! Veuillez choisir un autre gérant'
+                );
+                return $this->redirectToRoute('app_salle_ajouter');
+            }
 
         }
         return $this->render('pages/hall/add.html.twig', [
-            'form'=> $form->createView(),
+            'form'=> $form->createView()
         ]);
+
+
     }
 
     #[Route('/salle/editer/{id}', name: 'app_salle_editer', methods: ['GET', 'POST'])]

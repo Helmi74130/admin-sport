@@ -1,11 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gérants de salles{% endblock %}
+{% block title %}Utilisateurs{% endblock %}
 
 {% block body %}
-
-    {{ dump() }}
-    <h1 class="m-5">Gérer les gérants de salles</h1>
+    <h1 class="m-5">Gérer les utilisateurs</h1>
     <div class="container">
         {% for message in app.flashes('success') %}
             <div class="alert alert-success mt-4">
@@ -14,26 +12,26 @@
         {% endfor %}
         {% if not users.items is same as ([]) %}
             <div class="row justify-content-between">
-                <p class="col">Il y'a {{ users.getTotalItemCount }} gérant(s) de salle au total</p>
+                <p class="col">Il y'a {{ users.getTotalItemCount }} utilisateur(s) au total</p>
                 <div class="col d-flex justify-content-end">
-                    <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un Gérant de salle</a>
+                    <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un Utilisateur</a>
                 </div>
             </div>
-
-
             <div class="row justify-content-around mt-5">
                 {% for user in users %}
-                    <div class="card col-5 mt-5">
+                    <div class="card col-11 col-lg-5 mt-5">
                         <div class="card-body">
                             <h5 class="card-title border-bottom pb-3">{{ user.civility }} {{ user.name }} {{ user.firstname }}</h5>
                             <div class="card-text mt-4 border-bottom">
                                 <div class="d-flex justify-content-around mt-3">
                                     <h6 class="fs-4">Roles:</h6>
-                                    {% if user.civility == 'Mr' %}
-                                        <p>Gérant de salle</p>
+                                    {% for role in user.roles %}
+                                    {% if role == 'ROLE_LEADER' %}
+                                        <p>Gérant de Franchise</p>
                                     {% else %}
-                                        <p>Gérante de salle</p>
+                                        <p>Gérant de Salle</p>
                                     {% endif %}
+                                    {% endfor %}
                                 </div>
                             </div>
                             <h6 class="card-subtitle mb-2 text-muted m-3">E-Mail: {{ user.email }}</h6>
@@ -46,18 +44,16 @@
                     </div>
                 {% endfor %}
             </div>
-
             <div class="navigation d-flex justify-content-center mt-5">
                     {{ knp_pagination_render(users) }}
         {% else %}
-            <h2 class="lh-lg">Aucun gérant de salle pour le moment, veuillez cliquer sur le bouton ajouter pour commencer!</h2>
+            <h2 class="lh-lg">Aucun utilisateur pour le moment, veuillez cliquer sur le bouton ajouter pour commencer!</h2>
             <div class="col d-flex justify-content-end">
-                <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un Gérant de salle</a>
+                <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un Utilisateur</a>
             </div>
         {% endif %}
             </div>
     </div>
-
     {% for user in users %}
         <!-- Modal delete-->
         <div class="modal fade" id="deleteModal{{ user.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -77,7 +73,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Modal edit-->
         <div class="modal fade" id="editModal{{ user.id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog">

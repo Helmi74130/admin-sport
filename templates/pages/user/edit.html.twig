@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My Apps | Modifier un utilisateur{% endblock %}
+{% block title %}Modifier un utilisateur{% endblock %}
 
 {% block body %}
 
@@ -9,11 +9,13 @@
 
     <div class="container">
         <div class="row justify-content-around shadow">
-            <div class="col-5 text-center mt-3">{{ form_row(form.civility) }}</div>
-            <div class="col-5 text-center mt-3">{{ form_row(form.firstname) }}</div>
-            <div class="col-5 text-center mt-3">{{ form_row(form.name) }}</div>
-            <div class="col-5 text-center mt-3">{{ form_row(form.phone) }}</div>
-            <div class="col-5 text-center mt-3">{{ form_row(form.roles) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.civility) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.firstname) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.name) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.phone) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.city) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.isActive) }}</div>
+            <div class="col-lg-5 col-12 text-center mt-3">{{ form_row(form.roles) }}</div>
         </div>
         <button class="btn btn-outline-warning m-5 align-self-end">Modifier</button>
     </div>

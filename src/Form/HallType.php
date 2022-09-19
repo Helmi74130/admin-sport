@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Hall;
 
 
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -21,6 +20,34 @@ class HallType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $user = $event->getData();
+            $form = $event->getForm();
+            // checks if the Permission object is "new"
+            // If no data is passed to the form, the data is "null".
+            // This should be considered a new "Permission"
+            if (!$user || null === $user->getId()) {
+                $form->add('leaderHall',null, [
+                    'mapped' => true,
+                    'label' => 'Avec quelle gérant de SALLE souhaité(e) vous faire un lien?'
+                ]);
+            }
+        });
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $leader = $event->getData();
+            $form = $event->getForm();
+
+            // checks if the Permission object is "new"
+            // If no data is passed to the form, the data is "null".
+            // This should be considered a new "Permission"
+            if (!$leader || null === $leader->getId()) {
+                $form->add('leader',null, [
+                    'mapped' => true,
+                    'label' => 'Avec quelle gérant de FRANCHISE souhaité(e) vous faire un lien?'
+                ]);
+            }
+        });
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom de la salle *',
@@ -77,40 +104,9 @@ class HallType extends AbstractType
             ])
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Image de la salle',
-                'required' => false
+                'required' => true
             ])
-
         ;
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            $user = $event->getData();
-            $form = $event->getForm();
-
-            // checks if the Permission object is "new"
-            // If no data is passed to the form, the data is "null".
-            // This should be considered a new "Permission"
-            if (!$user || null === $user->getId()) {
-                $form->add('user',null, [
-                    'mapped' => true,
-                    'label' => 'Avec quelle gérant de SALLE souhaité(e) vous faire un lien?'
-                ]);
-            }
-        });
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            $leader = $event->getData();
-            $form = $event->getForm();
-
-            // checks if the Permission object is "new"
-            // If no data is passed to the form, the data is "null".
-            // This should be considered a new "Permission"
-            if (!$leader || null === $leader->getId()) {
-                $form->add('leader',null, [
-                    'mapped' => true,
-                    'label' => 'Avec quelle gérant de FRANCHISE souhaité(e) vous faire un lien?'
-                ]);
-            }
-        });
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void

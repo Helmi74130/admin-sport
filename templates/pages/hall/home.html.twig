@@ -3,7 +3,6 @@
 {% block title %}My Apps | Salles{% endblock %}
 
 {% block body %}
-{{ dump() }}
     <h1 class="m-5">Gérer les Salles</h1>
         <div class="container">
             {% for message in app.flashes('success-salle') %}
@@ -20,12 +19,12 @@
                 </div>
                 <div class="row justify-content-around">
                     {% for hall in halls %}
-                        <div class="card col-12 mt-5 p-0 bg-secondary rounded shadow {{ hall.isactive ? '' : 'opacity-75' }}">
-                            <div class="card-header d-flex justify-content-between bg-primary text-light">
-                                <div class="{{ hall.isactive ? 'text-light' : 'text-danger' }} mt-2 fs-2">
+                        <div class=" col-11 mt-5 bg-secondary rounded shadow {{ hall.isactive ? '' : 'opacity-75' }}">
+                            <div class="row p-0 justify-content-between bg-primary text-light">
+                                <div class="{{ hall.isactive ? 'text-light' : 'text-danger' }} col-lg-8 col-12 mt-2 fs-2">
                                     <p class="text-center text-light">{{ hall.isActive ? 'Salle en activitée :' : 'Salle en inactivitée: ' }} {{ hall.name }} </p>
                                 </div>
-                                <div class="row card-title mt-3">
+                                <div class="row col-lg-3 col-10 m-1">
                                     <div class="col d-flex justify-content-end">
                                         <a type="button" class="btn btn-outline-warning rounded btn-sm me-4" href=" {{ path('app_salle_editer', {id: hall.id}) }}">Editer</a>
                                         <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hall.id }}">Supprimer</a>
@@ -35,24 +34,17 @@
                             <div class="card-body p-0">
 
                                 <div class="row">
-                                    {% if hall.imageName == "" %}
-                                        {#<div style="height: 400px" class="col-5">
-                                            <img alt="image de salle de sport" height="300px" class="col-11" src="images/hall/ORANGE_BLEUE-1.png">
-                                            <p class="text-warning text-center">Cette salle n'a pas de photo actuellement, cliqué sur éditer pour ajouter une photo</p>
-                                        </div>#}
-                                    {% else %}
-                                        <img alt="image de salle de sport" class="col-5 " height="400px" src="{{ vich_uploader_asset(hall, 'imageFile') }}">
-                                    {% endif %}
-                                    <div class="card-text mt-2 pt-3 col-6 fs-4">
+                                        <img alt="image de salle de sport" class="col-lg-5 col-12 " height="400px" src="{{ vich_uploader_asset(hall, 'imageFile') }}">
+                                    <div class="card-text mt-2 pt-3 col-lg-6 col-12 fs-4">
                                         <div class="row">
                                             <p class="col-4 text-primary">Gérant(e) de la Franchise:</p>
                                             <p class="col">{{ hall.leader.civility}} {{ hall.leader.name}} {{ hall.leader.firstname}}</p>
                                         </div>
-                                        {% if hall.user == null %}
+                                        {% if hall.leaderHall == null %}
                                         {% else %}
                                             <div class="row">
                                                 <p class="col-4 text-primary">Gérant(e) de la salle:</p>
-                                                <p class="col">{{ hall.user.civility}} {{ hall.user.name}} {{ hall.user.firstname}}</p>
+                                                <p class="col">{{ hall.leaderHall.civility}} {{ hall.leaderHall.name}} {{ hall.leaderHall.firstname}}</p>
                                             </div>
                                         {% endif %}
                                         <div class="row">
