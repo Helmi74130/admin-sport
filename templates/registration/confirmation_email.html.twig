@@ -1,12 +1,15 @@
-<h1>Bonjour {{ user.name }} !</h1>
+<h1>Bienvenue chez Orange Bleu My Admin {{ user.civility }} {{ user.name }} {{ user.firstname }}!</h1>
 
-<p>Nous vous informons que votre compte est ouvert</p>
+<p>Nous vous avons le plaisir de vous informer que votre compte est ouvert</p>
 
+<p>Votre identifiant de connexion est <strong>{{ user.email }}</strong> <br>
+    Votre mot de passe est <strong>{{ password }}</strong> pensez à le changer! Compte-> paramètres->réinitialiser le mot de passe</p>
 <p>
-    Avant de commencer veuillez confirmer votre adresse mail  <br><br>
+    Avant de continuer veuillez confirmer votre adresse mail  <br><br>
     <a href="{{ signedUrl }}">Confirmer mon e-mail</a>.
+
 </p>
 
 <p>
-    A très vite !
+    A très vite chez Orange Bleu My Admin!
 </p>

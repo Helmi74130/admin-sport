@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserHallController extends AbstractController
 {
 
-    #[Route('/modules', name: 'app_user_module', methods: ['GET'])]
+    #[Route('/profile/modules', name: 'app_user_module', methods: ['GET'])]
     public function index(HallRepository $hallRepository, PaginatorInterface $paginator, Request $request): Response
     {
         /**
@@ -38,7 +38,7 @@ class UserHallController extends AbstractController
         ]);
     }
 
-    #[Route('/salles', name: 'app_user_hall_test', methods: ['GET'])]
+    #[Route('/profile/salles', name: 'app_user_hall_test', methods: ['GET'])]
     public function salle(HallRepository $hallRepository, PaginatorInterface $paginator, Request $request): Response
     {
         /**
@@ -62,7 +62,7 @@ class UserHallController extends AbstractController
         ]);
     }
 
-    #[Route('/salles/{id}', name: 'app_user_hall_permission')]
+    #[Route('/profile/salles/{id}', name: 'app_user_hall_permission')]
     public function modules($id, ManagerRegistry $doctrine, Request $request): Response
     {
         /**

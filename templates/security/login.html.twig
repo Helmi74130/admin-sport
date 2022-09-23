@@ -3,7 +3,6 @@
 {% block title %}Connexion!{% endblock %}
 
 {% block body %}
-    {{ dump() }}
     <div class="container">
         <div class="row justify-content-center">
             <form class="col-12 d-flex flex-column align-items-center mb-5" method="post">
@@ -29,7 +28,6 @@
                     <input type="hidden" name="_csrf_token"
                            value="{{ csrf_token('authenticate') }}"
                     >
-
                     <div class="col-8 checkbox mt-3">
                         <label>
                             <input type="checkbox" name="_remember_me"> Se souvenir de moi

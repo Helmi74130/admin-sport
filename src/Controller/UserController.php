@@ -20,6 +20,10 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
@@ -32,7 +36,7 @@ class UserController extends AbstractController
         $this->emailVerifier = $emailVerifier;
     }
 
-    #[Route('/user', name: 'app_user')]
+    #[Route('/admin/user', name: 'app_user', options: ['expose' => true])]
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
         /**
@@ -46,16 +50,28 @@ class UserController extends AbstractController
         $users = $paginator->paginate(
             $userRepository->findAll(),
             $request->query->getInt('page', 1),
-            6
+            20
         );
+
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getName();
+            },
+        ];
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+
+        $serializer = new Serializer([$normalizer], [$encoder]);
+        $userSerialze = $serializer->serialize($users, 'json');
 
         return $this->render('pages/user/home.html.twig', [
             'users' => $users,
+            'userSerialze' => $userSerialze
         ]);
     }
 
 
-    #[Route('/user/ajouter', name: 'app_user_add', methods: ['GET', 'POST'])]
+    #[Route('/admin/user/ajouter', name: 'app_user_add', methods: ['GET', 'POST'])]
     public function add(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, SecurityAuthenticator $authenticator, EntityManagerInterface $entityManager, MailerInterface $mailer) :Response
     {
         /**
@@ -74,6 +90,8 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            $clearPassword = $form->get('password')->getViewData();
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -82,22 +100,9 @@ class UserController extends AbstractController
                 )
             );
 
-            $entityManager->persist($user);
             $entityManager->flush();
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                $email= (new TemplatedEmail())
-                    ->from(new Address('orangemyapps@gmail.com', 'Orange bleu admin'))
-                    ->to($user->getEmail())
-                    ->subject('Confirmer votre adresse mail')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-                    //pass variable user
-                    ->context([
-                        'user' => $user
-                    ])
-            );
 
-            $mailer->send($email);
+            $entityManager->persist($user);
 
             $this->addFlash(
                 'success',
@@ -136,6 +141,22 @@ class UserController extends AbstractController
                     $entityManager->persist($leader);
                     $entityManager->flush();
 
+                    // generate a signed url and email it to the user
+                    $this->emailVerifier->sendEmailConfirmation('app_verify_email',$user,
+                        $email= (new TemplatedEmail())
+                            ->from(new Address('orangemyapps@gmail.com', 'Orange bleu admin'))
+                            ->to($user->getEmail())
+                            ->subject('Confirmer votre adresse mail')
+                            ->htmlTemplate('registration/confirmation_email.html.twig')
+                            //pass variable user
+                            ->context([
+                                'user' => $user,
+                                'password'=> $clearPassword
+                            ])
+                    );
+
+                    $mailer->send($email);
+
                     return $this->redirectToRoute('app_user');
                 }else{
                     $leaderHall= new LeaderHall();
@@ -151,10 +172,29 @@ class UserController extends AbstractController
                         ->setUser($user);
 
                     $entityManager->persist($leaderHall);
+
                     $entityManager->flush();
+
+                    // generate a signed url and email it to the user
+                    $this->emailVerifier->sendEmailConfirmation('app_verify_email',$user,
+                        $email= (new TemplatedEmail())
+                            ->from(new Address('orangemyapps@gmail.com', 'Orange bleu admin'))
+                            ->to($user->getEmail())
+                            ->subject('Confirmer votre adresse mail')
+                            ->htmlTemplate('registration/confirmation_email.html.twig')
+                            //pass variable user
+                            ->context([
+                                'user' => $user,
+                                'password'=> $clearPassword
+                            ])
+                    );
+
+                    $mailer->send($email);
                     return $this->redirectToRoute('app_user');
                 }
             }
+
+
             return $this->redirectToRoute('app_user');
         }
         return $this->render('pages/user/add.html.twig', [
@@ -188,7 +228,7 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
 
-    #[Route('/user/{id}', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/user/{id}', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(User $user,EntityManagerInterface $manager, Request $request): Response
     {
         /**
@@ -221,7 +261,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user/supprimer/{id}', name: 'app_user_delete', methods: ['GET'])]
+    #[Route('/admin/user/supprimer/{id}', name: 'app_user_delete', methods: ['GET'])]
     public function delete( EntityManagerInterface $manager, User $user):Response
     {
         /**

@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PermissionController extends AbstractController
 {
-    #[Route('/permission', name: 'app_permission', methods: ['GET'])]
+    #[Route('/admin/permission', name: 'app_permission', methods: ['GET'])]
     public function index(PermissionRepository $permissionRepository, PaginatorInterface $paginator, Request $request): Response
     {
         /**
@@ -36,7 +36,7 @@ class PermissionController extends AbstractController
         ]);
     }
 
-    #[Route('/permission/ajouter', name: 'app_ajouter', methods: ['GET', 'POST'])]
+    #[Route('/admin/permission/ajouter', name: 'app_ajouter', methods: ['GET', 'POST'])]
     public function add(Request $request, EntityManagerInterface $manager) :Response
     {
         /**
@@ -70,7 +70,7 @@ class PermissionController extends AbstractController
         ]);
     }
 
-    #[Route('/permission/editer/{id}', name: 'app_editer', methods: ['GET', 'POST'])]
+    #[Route('/admin/permission/editer/{id}', name: 'app_editer', methods: ['GET', 'POST'])]
     public function edit(Permission $permission, Request $request, EntityManagerInterface $manager):Response
     {
         /**

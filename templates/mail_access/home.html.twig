@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Boite de réception{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mt-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <h1 class="m-5">Boite de réception</h1>
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center justify-content-around">
+            {% for contact in contacts %}
+                <div class="card col-lg-5 col-11 text-center mt-5 p-0 ">
+                    <div class="card-header bg-primary text-light">
+                        De : {{ contact.email }}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Nom: {{ contact.name }}</h5>
+                        <p class="card-text">Sujet: {{ contact.subject }}</p>
+                    </div>
+                    <div class="">
+                        <div class="mb-5 mt-2">{{ contact.message }}</div>
+                    </div>
+                    <div class="card-footer text-muted d-flex  justify-content-around">
+                        Message reçu le {{ contact.createdAt|date("d/m/Y") }} à {{ contact.createdAt|date("H:i:s") }}
+                        <a type="button" class="btn btn-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{contact.id }}">Supprimer</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+        <!-- Modal delete-->
+    {% for contact in contacts %}
+        <div class="modal fade" id="deleteModal{{ contact.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Voulez-vous supprimer le mail?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        <p>Attention toutes modifications est définitive!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <a href="{{path('app_mail_supprimer', {id: contact.id})}}" type="button" class="btn btn-danger">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+
+

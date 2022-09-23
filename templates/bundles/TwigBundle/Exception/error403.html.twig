@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Salles{% endblock %}
+
+{% block body %}
+<body class="bg-dark text-white py-5">
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-2 text-center">
+            <p><i class="fa fa-exclamation-triangle fa-5x"></i><br/>Status Code: 403</p>
+        </div>
+        <div class="col-md-10">
+            <h3>OPPSSS!!!! Désolé...</h3>
+            <p>votre accès est refusé pour des raisons de sécurité!!<br/>Veuillez revenir à la page précédente pour continuer à naviguer.</p>
+            <a class="navbar-brand text-warning" href="{{ path('app_home') }}">Retour à l'accueil</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

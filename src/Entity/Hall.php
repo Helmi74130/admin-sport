@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -28,10 +29,12 @@ class Hall
 
     #[Vich\UploadableField(mapping: 'hall_images', fileNameProperty: 'imageName')]
     #[Assert\NotBlank()]
+    #[Ignore]
     private ?File $imageFile = null;
 
     #[ORM\Column(type: 'string' ,nullable: false)]
     #[Assert\NotBlank()]
+    #[Ignore]
     private ?string $imageName = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -125,7 +128,7 @@ class Hall
         return $this->imageName;
     }
 
-    public function setImageSize(?int $imageSize): void
+ /*   public function setImageSize(?int $imageSize): void
     {
         $this->imageSize = $imageSize;
     }
@@ -133,7 +136,7 @@ class Hall
     public function getImageSize(): ?int
     {
         return $this->imageSize;
-    }
+    }*/
 
     public function getShortDescription(): ?string
     {

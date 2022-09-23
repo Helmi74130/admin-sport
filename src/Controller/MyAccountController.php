@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MyAccountController extends AbstractController
 {
-    #[Route('/compte', name: 'app_my_account')]
+    #[Route('/profile/compte', name: 'app_my_account')]
     public function index(HallRepository $hallRepository): Response
     {
         /**

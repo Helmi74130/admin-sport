@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ItemsController extends AbstractController
 {
-    #[Route('/items', name: 'app_items', methods: ['GET'])]
+    #[Route('/admin/items', name: 'app_items', methods: ['GET'])]
     public function index(LeaderRepository $leaderRepository, PaginatorInterface $paginator, Request $request): Response
     {
 

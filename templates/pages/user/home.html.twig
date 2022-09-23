@@ -3,7 +3,7 @@
 {% block title %}Utilisateurs{% endblock %}
 
 {% block body %}
-    <h1 class="m-5">Gérer les utilisateurs</h1>
+    <h1 class="m-5">Tous les utilisateurs</h1>
     <div class="container">
         {% for message in app.flashes('success') %}
             <div class="alert alert-success mt-4">
@@ -12,38 +12,19 @@
         {% endfor %}
         {% if not users.items is same as ([]) %}
             <div class="row justify-content-between">
-                <p class="col">Il y'a {{ users.getTotalItemCount }} utilisateur(s) au total</p>
+                <p id="itemsNumber" class="col"></p>
                 <div class="col d-flex justify-content-end">
                     <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un Utilisateur</a>
                 </div>
             </div>
-            <div class="row justify-content-around mt-5">
-                {% for user in users %}
-                    <div class="card col-11 col-lg-5 mt-5">
-                        <div class="card-body">
-                            <h5 class="card-title border-bottom pb-3">{{ user.civility }} {{ user.name }} {{ user.firstname }}</h5>
-                            <div class="card-text mt-4 border-bottom">
-                                <div class="d-flex justify-content-around mt-3">
-                                    <h6 class="fs-4">Roles:</h6>
-                                    {% for role in user.roles %}
-                                    {% if role == 'ROLE_LEADER' %}
-                                        <p>Gérant de Franchise</p>
-                                    {% else %}
-                                        <p>Gérant de Salle</p>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <h6 class="card-subtitle mb-2 text-muted m-3">E-Mail: {{ user.email }}</h6>
-                            <h6 class="card-subtitle mb-2 text-muted m-3">Tél: {{ user.phone }}</h6>
-                            <div class="mt-3">
-                                <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ user.id }}">Modifier</a>
-                                <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ user.id }}">Supprimer</a>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+        <div class="row justify-content-between m-5">
+            <div class="form-check form-switch col-5 fs-4">
+                <input class="form-check-input" type="checkbox" id="switch"  checked="">
+                <label class="form-check-label" for="switch">Filtre active</label>
             </div>
+            <input class="col-6" type="text" id="search" placeholder="Chercher un gérant">
+        </div>
+            <div id="searchResult" class="row justify-content-around mt-5"></div>
             <div class="navigation d-flex justify-content-center mt-5">
                     {{ knp_pagination_render(users) }}
         {% else %}
@@ -93,3 +74,88 @@
         </div>
     {% endfor %}
 {% endblock %}
+
+{% block javascripts %}
+
+    <script>
+
+        let allLeaders = JSON.parse({{ userSerialze | json_encode| raw}})
+        console.log(allLeaders)
+
+        const searchInput = document.querySelector("#search")
+        const searchResult = document.querySelector("#searchResult")
+        let itemsNumber = document.querySelector("#itemsNumber")
+
+        //This function create user list in the dom
+        function CreateUserList(dataList){
+            dataList.forEach(element => {
+
+                let role =''
+                element.roles[0] === "ROLE_USER" ? role='Gérant de salle' : role='Gérant de franchise'
+
+                let textActive =''
+                    element.isActive ? textActive='En activité' : textActive='En inactivité'
+
+                const listItem = document.createElement("div")
+                listItem.setAttribute("class", "card col-11 col-lg-5 mt-5")
+                listItem.innerHTML =
+                    `
+                    <div>
+                        <div>
+                            <h5 class="card-title border-bottom pb-3 mt-3">${ element.civility } ${ element.name } ${ element.firstname }</h5>
+                            <div class="card-text mt-4 border-bottom">
+                                <div class="d-flex justify-content-around mt-3">
+                                    <h6 class="fs-4">Roles:</h6>
+                                    <p>${role}</p>
+                                    <p>${textActive}</p>
+                                </div>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted m-3">E-Mail: ${ element.email }</h6>
+                            <h6 class="card-subtitle mb-2 text-muted m-3">Tél: ${ element.phone }</h6>
+                            <div class="mt-3">
+                                <a type="button" class="btn btn-outline-primary rounded btn-sm me-4  mb-3" data-bs-toggle="modal" data-bs-target="#editModal${ element.id }">Modifier</a>
+                                <a type="button" class="btn btn-outline-danger rounded btn-sm  mb-3" data-bs-toggle="modal" data-bs-target="#deleteModal${ element.id }">Supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                    `
+                itemsNumber.innerText = 'Il y a '+dataList.length+' item(s) au total'
+
+                searchResult.appendChild(listItem)
+            })
+        }
+        CreateUserList(allLeaders)
+
+        //This function filter the user list with the name and firstname
+        searchInput.addEventListener("input", filterData)
+        function filterData(e) {
+            searchResult.innerHTML = ""
+            const searchedString = e.target.value.toLowerCase()
+            const filteredArr = allLeaders.filter(el => el.name.toLowerCase().includes(searchedString) || el.firstname.toLowerCase().includes(searchedString))
+            CreateUserList(filteredArr)
+
+            if ( filteredArr.length === 0 ) {
+                itemsNumber.innerText = 'Aucun utilisateur trouvé'
+            }
+        }
+        let buttonSwitch = document.querySelector('#switch')
+
+
+        //This function return user active or no active with the switch
+        buttonSwitch.addEventListener('input', filterDataActive);
+
+        function filterDataActive(e){
+            let valueSwitch = e.target.checked
+            searchResult.innerHTML = ""
+
+            if (valueSwitch === true){
+                const dataActive = allLeaders.filter(el=> el.isActive === true)
+                CreateUserList(dataActive)
+            }else{
+                const dataNoActive = allLeaders.filter(el=> el.isActive === false)
+                CreateUserList(dataNoActive)
+            }
+        }
+    </script>
+{% endblock %}
+

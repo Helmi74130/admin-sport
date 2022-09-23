@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Salles{% endblock %}
+
+{% block body %}
+    <div class="d-flex align-items-center justify-content-center vh-100">
+        <div class="text-center">
+            <h1 class="display-1 fw-bold">404</h1>
+            <p class="fs-3"> <span class="text-danger">Opps!</span> Page non trouvé.</p>
+            <p class="lead">
+                La page que vous recherchez n'existe pas.
+                <a class="navbar-brand text-warning" href="{{ path('app_home') }}">Retour à l'accueil</a>
+            </p>
+
+        </div>
+    </div>
+
+{% endblock %}

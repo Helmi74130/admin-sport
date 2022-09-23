@@ -6,36 +6,35 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav me-auto">
-                {% if not app.user %}
+                {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_user') }}">Compte utilisateurs</a>
+                        <a class="nav-link" href="{{ path('app_admin') }}"><i class="bi bi-boxes fs-4"> </i>Administration</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_admin') }}">Administration</a>
+                        <a class="nav-link" href="{{ path('app_user') }}"><i class="bi bi-people fs-4"> </i>Compte utilisateurs</a>
                     </li>
                     <li class="nav-item">
-                        <a type="button" class="nav-link btn btn-success text-light" href="{{ path('app_login') }}">Connexion</a>
-                    </li>
-                {% endif %}
-                {% if app.user %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_home') }}">Mon espace</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_contact') }}">Nous Contacter</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_my_account') }}">Parametres</a>
+                        <a class="nav-link" href="{{ path('app_mail_access') }}"><i class="bi bi-envelope-paper fs-4"></i> Email</a>
                     </li>
                     <li class="nav-item">
                         <a type="button" class="nav-link btn btn-warning" href="{{ path('app_logout') }}">Déconnexion</a>
                     </li>
+                {% elseif is_granted('ROLE_USER') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_contact') }}"><i class="bi bi-envelope-paper fs-4"></i> Nous Contacter</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_my_account') }}"><i class="bi bi-nut fs-4"></i> Parametres</a>
+                    </li>
+                    <li class="nav-item">
+                        <a type="button" class="nav-link btn btn-warning" href="{{ path('app_logout') }}">Déconnexion</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a type="button" class="nav-link btn btn-success text-light" href="{{ path('app_login') }}">Connexion</a>
+                    </li>
                 {% endif %}
             </ul>
-            {#<form class="d-flex">
-                <input class="form-control me-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-            </form>#}
         </div>
     </div>
 </nav>

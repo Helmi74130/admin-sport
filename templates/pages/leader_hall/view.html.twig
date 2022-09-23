@@ -16,12 +16,12 @@
             </div>
         {% endfor %}
         <div class="row justify-content-around mb-5">
-                <div class=" col-12 mt-5 p-0 row bg-secondary rounded shadow {{ leaderHall.isactive ? '' : 'opacity-75' }}">
+                <div class="justify-content-center col-12 mt-5 p-0 row bg-secondary rounded shadow {{ leaderHall.isactive ? '' : 'opacity-75' }}">
                     <div class="row p-0 col-12 bg-primary text-light">
                         <div class="{{ leaderHall.isactive ? 'text-light' : 'text-danger' }} fs-4 col-12">
                             <p class="text-center">{{ leaderHall.isactive ? 'Salle en activitée:' : 'Salle en inactivitée: ' }} {{ leaderHall.hall.name|title }} </p>
                         </div>
-                            <div class="row justify-content-around col-12 m-1">
+                            <div class="row justify-content-around col-12 m-1 mt-3 mb-3">
                                 <a href="{{ path('app_editer', {id: leaderHall.hall.permissions.id}) }}" type="button" class="btn btn-outline-warning rounded btn-sm col-3">Editer les permissions</a>
                                 <a href="{{ path('app_salle_editer', {id: leaderHall.hall.id}) }}" type="button" class="btn btn-outline-warning  rounded btn-sm col-3" >Editer la salle</a>
                                 <a type="button" class="btn btn-danger rounded btn-sm col-3" data-bs-toggle="modal" data-bs-target="#deleteModal{{ leaderHall.id }}">Supprimer</a>

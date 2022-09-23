@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserPermissionController extends AbstractController
 {
-    #[Route('/permissions', name: 'app_user_permission')]
+    #[Route('/profile/permissions', name: 'app_user_permission')]
     public function index(HallRepository $hallRepository, PaginatorInterface $paginator, Request $request): Response
     {
         /**

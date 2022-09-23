@@ -3,19 +3,58 @@
 {% block title %}Gérant franchise{% endblock %}
 
 {% block body %}
-{{ dump() }}
+    <style>
+        @media only screen and (max-width: 1200px){
+            table, thead, tbody, tr, th, td{
+                display: block;
+            }
+            thead{
+                display: none;
+            }
+            td{
+                padding-left: 150px;
+                position: relative;
+                background: #fff;
+                margin-top: -1px;
+            }
+            td:nth-child(odd){
+                background: #f3f3f3;
+            }
+            td::before{
+                content: attr(data-label);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 130px;
+                bottom: 0;
+                background: #b7b7b7;
+                color: black;
+                display: flex;
+                align-items: center;
+                padding-left: 20px;
+            }
+            tr{
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
     <div class="d-flex justify-content-around mt-5">
-        <h1>Listes des gérants de franchise</h1>
+        <h1 >Listes des gérants de franchise</h1>
         <a class="btn btn-outline-success" href="{{ path('app_user_add') }}">Ajouter un gérant</a>
     </div>
     <div class="row justify-content-between m-5">
-        <p class="col">Il y a {{ leaders.getTotalItemCount }} item(s) au total</p>
+        <p id="itemsNumber" class="col"></p>
+        <input class="col-6" type="text" id="search" placeholder="Chercher un gérant de salle">
     </div>
     {% if not leaders.items is same as ([]) %}
         <div class="container">
             <div class="row justify-content-around">
+                <div class="form-check form-switch col-11 fs-4">
+                    <input class="form-check-input" type="checkbox" id="switch"  checked="">
+                    <label class="form-check-label" for="switch">Filtre active</label>
+                </div>
                 <div class="col-12">
-                    <table class="table table-hover">
+                    <table class=" table table-striped">
                         <thead>
                         <tr class="table-primary text-center">
                             <th scope="col">Nom et prénom</th>
@@ -23,30 +62,16 @@
                             <th scope="col">Ville</th>
                             <th scope="col">Téléphone</th>
                             <th scope="col">Active</th>
-                            <th scope="col">Apperçu</th>
-                            <th scope="col">Modifier</th>
-                            <th scope="col">Supprimer</th>
+                            <th scope="col">Voir</th>
+                            <th scope="col">Modif.</th>
+                            <th scope="col">Supp.</th>
                         </tr>
                         </thead>
-                        {% for leader in leaders %}
-                            <tbody class="text-center">
-                            <tr class="{{ (leader.isActive) ? 'table-light' : 'table-warning' }}">
-                                <td>{{ leader.user.civility }} {{ leader.user.name }} {{ leader.user.firstname }}</td>
-                                <td>{{ leader.user.email }}</td>
-                                <td>{{ leader.user.city }}</td>
-                                <td>{{ leader.user.phone }}</td>
-                                <td>{{ (leader.user.isActive) ? 'Oui' : 'Non' }}</td>
-                                <td><a href="{{ path('app_leader_view',{id: leader.id}) }}" type="button" class="text-info">Salles</a></td>
-                                <td><a type="button" class="" data-bs-toggle="modal" data-bs-target="#editModal{{ leader.user.id }}">Modifier</a></td>
-                                <td><a type="button" class="text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ leader.user.id }}">Supprimer</a></td>
-                            </tr>
-                            </tbody>
-                        {% endfor %}
+                        <tbody id="searchResult" class="text-center"></tbody>
                     </table>
                 </div>
             </div>
         </div>
-
         <div class="navigation d-flex justify-content-center mt-5">
         {{ knp_pagination_render(leaders) }}
     {% else %}
@@ -54,6 +79,7 @@
         <a class="btn btn-outline-success" href="{{ path('app_ajouter_leader') }}">Ajouter un gérant</a>
     {% endif %}
     </div>
+
     {% for leader in leaders %}
         <!-- Modal edit-->
         <div class="modal fade" id="editModal{{ leader.user.id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -93,123 +119,75 @@
             </div>
         </div>
     {% endfor %}
-
 {% endblock %}
 
+{% block javascripts %}
+
+    <script>
+
+        let leadersHall = JSON.parse({{ leadersSerialze | json_encode| raw}})
+
+        const searchInput = document.querySelector("#search")
+        const searchResult = document.querySelector("#searchResult")
+        let itemsNumber = document.querySelector("#itemsNumber")
+
+        //This function create user list in the dom
+        function CreateUserList(dataList){
+            dataList.forEach(element => {
+
+                let url = Routing.generate('app_leader_view',{id:''+element.id+''} )
+                let textActive =''
+                element.user.isActive ? textActive='oui' : textActive='non'
 
 
+                const listItem = document.createElement("tr")
+                listItem.innerHTML = `
+                    <td data-label="Nom Prénom">${element.user.civility} ${element.user.name} ${element.user.firstname}</td>
+                    <td data-label="Email">${element.user.email}</td>
+                    <td data-label="Ville">${element.user.city}</td>
+                    <td data-label="Tél.">${element.user.phone}</td>
+                    <td data-label="Active">${textActive}</td>
+                    <td data-label='Salles'><a href="${url}" type="button" class="text-info"><i class="bi bi-eye"></i></a></td>
+                    <td data-label="Modifier"><a type="button" class="" data-bs-toggle="modal" data-bs-target="#editModal${element.user.id}"><i class="bi bi-pencil-square"></i></a></td>
+                    <td data-label="Supprimer"><a type="button" class="text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${element.user.id}"><i class="bi bi-trash"></i></a></td>
+                    `
+                itemsNumber.innerText = 'Il y a '+dataList.length+' item(s) au total'
+
+                searchResult.appendChild(listItem)
+            })
+        }
+        CreateUserList(leadersHall)
+
+        //This function filter the user list with the name and firstname
+        searchInput.addEventListener("input", filterData)
+        function filterData(e) {
+            searchResult.innerHTML = ""
+            const searchedString = e.target.value.toLowerCase()
+            const filteredArr = leadersHall.filter(el => el.user.name.toLowerCase().includes(searchedString) || el.user.firstname.toLowerCase().includes(searchedString))
+            CreateUserList(filteredArr)
+
+            if ( filteredArr.length === 0 ) {
+                itemsNumber.innerText = 'Aucun utilisateur trouvé'
+            }
+        }
+        let buttonSwitch = document.querySelector('#switch')
 
 
+        //This function return user active or no active with the switch
+        buttonSwitch.addEventListener('input', filterDataActive);
 
+        function filterDataActive(e){
+            let valueSwitch = e.target.checked
+            searchResult.innerHTML = ""
 
-
-{#
-{% extends 'base.html.twig' %}
-
-{% block title %}Gérants de Franchises{% endblock %}
-
-{% block body %}
-{{ dump() }}
-    <h1 class="m-5">Gérants de franchises</h1>
-    <div class="container">
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success mt-4">
-            {{ message }}
-        </div>
-    {% endfor %}
-    {% if not leaders.items is same as ([]) %}
-        <div class="row justify-content-between">
-            <p class="col">Il y'a {{ leaders.getTotalItemCount }} gérant(s) de franchises au total</p>
-            <div class="col d-flex justify-content-end">
-                <a class="btn btn-outline-success" href="{{ path('app_ajouter_leader') }}">Ajouter un Gérant de franchises</a>
-            </div>
-        </div>
-        <div class="row justify-content-around">
-            {% for leader in leaders %}
-                <div class="card col-5 mt-4 p-0 rounded shadow {{ leader.isActive ? '' : 'opacity-50' }}">
-                    <div class="card-header d-flex justify-content-between bg-primary">
-                        <h5 class="fs-3 mt-2 lh-lg {{ leader.isActive ? 'text-light' : 'text-danger' }}">{{ leader.user.civility }} {{ leader.user.name }} {{ leader.user.firstname}}</h5>
-                        <p class="{{ leader.isActive ? 'text-success' : 'text-danger' }}">{{ leader.isActive ? 'En activité' : 'Ce gérant est désactivé' }}</p>
-                    </div>
-                    <div class="card-body">
-                            <div class="card-text pt-2 text-primary">
-                                <div class="row ">
-                                    <p class="col-4">Ville</p>
-                                    <p class="col">{{ leader.city }}</p>
-                                </div>
-                                <div class="row">
-                                    <p class="col-4">Tél:</p>
-                                    <p class="col">{{ leader.phone }}</p>
-                                </div>
-                                <div class="row">
-                                    <p class="col-4">Tél. commercial: </p>
-                                    {% if leader.commercialPhone == '' %}
-                                        <p class="col text-warning">Aucun tél. renseigné</p>
-                                    {% else %}
-                                        <p class="col">{{ leader.commercialPhone }}</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        <div class="d-flex justify-content-end mt-3">
-                            <a href="{{ path('app_leader_view',{id: leader.id}) }}" type="button" class="btn btn-outline-info rounded btn-sm me-4">Voir les salles</a>
-                            <a type="button" class="btn btn-outline-primary rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ leader.id }}">Editer</a>
-                            <a type="button" class="btn btn-outline-danger rounded btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ leader.id }}">Supprimer</a>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        </div>
-        <div class="navigation d-flex justify-content-center mt-5">
-        {{ knp_pagination_render(leaders) }}
-    {% else %}
-        <h2 class="mt-5 lh-lg">Aucun gérant(e) de franchise pour le moment, veuillez cliquer sur le bouton ajouter pour commencer!</h2>
-        <div class="col d-flex justify-content-end">
-            <a class="btn btn-outline-success" href="{{ path('app_ajouter_leader') }}">Ajouter un Gérant</a>
-        </div>
-    {% endif %}
-    </div>
-
-    {% for leader in leaders %}
-        <!-- Modal delete-->
-        <div class="modal fade" id="deleteModal{{ leader.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Voulez-vous supprimer le gérant {{ leader.name }} {{ leader.firstname }}?</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-danger">
-                        <p>Attention toutes suppressions est définitive!</p>
-                        <p>En supprimant un gérant vous acceptez de supprimer les salles associés ainsi que les permissions</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
-                        <a href="{{ path('app_supprimer_leader', {id: leader.id}) }}" type="button" class="btn btn-danger">Supprimer</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Modal edit-->
-        <div class="modal fade" id="editModal{{ leader.id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Voulez-vous modifier le gérant {{ leader.name }} {{ leader.firstname }}?</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-warning">
-                        <p>Attention toutes modifications est définitive!</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
-                        <a href=" {{ path('app_leader_editer', {id: leader.id}) }}" type="button" class="btn btn-warning">Modifier</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
+            if (valueSwitch === true){
+                const dataActive = leadersHall.filter(el=> el.user.isActive === true)
+                CreateUserList(dataActive)
+            }else{
+                const dataNoActive = leadersHall.filter(el=> el.user.isActive === false)
+                CreateUserList(dataNoActive)
+            }
+        }
+    </script>
 {% endblock %}
-#}
+
