@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PermissionLeaderController!{% endblock %}
+
+{% block body %}
+
+    <h1 class="m-5">Gérer les permissions des gérants</h1>
+    <div class="container">
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mt-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% if not leaderPermissions.items is same as ([]) %}
+        <div class="row justify-content-between">
+            <p class="col">Il y'a {{ leaderPermissions.getTotalItemCount }} permissions au total</p>
+        </div>
+        <div class="row justify-content-around">
+            {% for permission in leaderPermissions %}
+                <div class="card col-lg-5 col-11 mt-4 p-0 rounded shadow {{ permission.hall.isactive ? '' : 'opacity-50' }}">
+                    <div class="card-header d-flex justify-content-between bg-primary">
+                        <h5 class=" mt-2 lh-lg {{ permission.hall.isactive ? 'text-light' : 'text-danger' }}">Salle: {{ permission.hall.name }} </h5>
+                        <p class="text-danger">{{ permission.hall.isActive ? '' : 'Cette salle est désactivée' }}</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text mt-3 row justify-content-center">
+                            <div class="col-10 mt-2">
+                                <div class="form-check disabled">
+                                    <label class="form-check-label" for="flexCheckChecked">Vendre des boissons</label>
+                                    <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{  permission.isSellDrinks  ? 'checked=""' : '' }} >
+                                </div>
+                            </div>
+                            <div class="col-10 mt-2">
+                                <div class="form-check disabled">
+                                    <label class="form-check-label" for="flexCheckChecked">Modifier le statut d'un membre</label>
+                                    <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ permission.isMembersWrite ? 'checked=""' : '' }} >
+                                </div>
+                            </div>
+                            <div class="col-10 mt-2">
+                                <div class="form-check disabled">
+                                    <label class="form-check-label" for="flexCheckChecked">Accès au statut d'un membre</label>
+                                    <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ permission.isMembersRead ? 'checked=""' : '' }} >
+                                </div>
+                            </div>
+                            <div class="col-10 mt-2">
+                                <div class="form-check disabled">
+                                    <label class="form-check-label" for="flexCheckChecked">Ajouter un membre</label>
+                                    <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ permission.isMembersAdd ? 'checked=""' : '' }} >
+                                </div>
+                            </div>
+                            <div class="col-10 mt-2">
+                                <div class="form-check disabled">
+                                    <label class="form-check-label" for="flexCheckChecked">Voir les statistiques d'un membre</label>
+                                    <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ permission.isMembersStatistiqueRead ? 'checked=""' : '' }} >
+                                </div>
+                            </div>
+                            <div class="col-10 mt-2">
+                                <div class="form-check disabled">
+                                    <label class="form-check-label" for="flexCheckChecked">Modifier les échéanciés de paiement </label>
+                                    <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ permission.isPaymentSchedulesWrite ? 'checked=""' : '' }} >
+                                </div>
+                            </div>
+                            <div class="col-10 mt-2">
+                                <div class="form-check disabled">
+                                    <label class="form-check-label" for="flexCheckChecked">Accès aux échéanciés de paiement </label>
+                                    <input class="form-check-input" type="checkbox" value="" disabled="" id="flexCheckChecked" {{ permission.isPaymentSchedulesAdd ? 'checked=""' : '' }} >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <a type="button" class="btn btn-outline-warning rounded btn-sm me-4" data-bs-toggle="modal" data-bs-target="#editModal{{ permission.id }}">Editer</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        </div>
+        <div class="navigation d-flex justify-content-center mt-5">
+        {{ knp_pagination_render(leaderPermissions) }}
+    {% else %}
+        <h2 class="mt-5 lh-lg">Aucune permission pour le moment, veuillez ajouter une salle pour commencer!</h2>
+    {% endif %}
+    </div>
+
+    {% for permission in leaderPermissions %}
+
+        <!-- Modal edit-->
+        <div class="modal fade" id="editModal{{ permission.id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Voulez-vous modifier les permissions pour la salle: {{ permission.hall.name }}?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Attention toutes modifications est définitive!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <a href=" {{ path('app_editer', {id: permission.id}) }}" type="button" class="btn btn-warning">Modifier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

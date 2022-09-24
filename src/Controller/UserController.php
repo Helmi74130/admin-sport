@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Leader;
 use App\Entity\LeaderHall;
+use App\Entity\PermissionLeader;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -100,13 +101,13 @@ class UserController extends AbstractController
                 )
             );
 
-            $entityManager->flush();
-
             $entityManager->persist($user);
+
+            $entityManager->flush();
 
             $this->addFlash(
                 'success',
-                'Le gérant de salle a été ajouté avec succès !'
+                'Le gérant a été ajouté avec succès !'
             );
 
             /*return $userAuthenticator->authenticateUser(
@@ -123,6 +124,14 @@ class UserController extends AbstractController
             $active = $user->isIsActive();
             $city = $user->getCity();
             $mail = $user->getEmail();
+            $permissionLeader= new PermissionLeader();
+            $permissionLeader->setIsPaymentSchedulesWrite(true)
+                ->setIsSellDrinks(true)
+                ->setIsPaymentSchedulesAdd(true)
+                ->setIsMembersWrite(true)
+                ->setIsMembersStatistiqueRead(true)
+                ->setIsMembersRead(true)
+                ->setIsMembersAdd(true);
 
             foreach ($user->getRoles() as $role) {
                 if ($role === 'ROLE_LEADER'){
@@ -136,6 +145,7 @@ class UserController extends AbstractController
                         ->setPhone($phone)
                         ->setEmail($mail)
                         ->setIsActive($active)
+                        ->setPermissionLeader($permissionLeader)
                         ->setUser($user);
 
                     $entityManager->persist($leader);
@@ -157,7 +167,7 @@ class UserController extends AbstractController
 
                     $mailer->send($email);
 
-                    return $this->redirectToRoute('app_user');
+                    return $this->redirectToRoute('app_permission_leader_edit', ['id' => $permissionLeader->getId()]);
                 }else{
                     $leaderHall= new LeaderHall();
                     $user = $form->getData();
@@ -253,7 +263,6 @@ class UserController extends AbstractController
             );
 
             return $this->redirectToRoute('app_user');
-
         }
 
         return $this->render('pages/user/edit.html.twig', [

@@ -155,6 +155,7 @@ class LeaderController extends AbstractController
         if ($form->isSubmitted()){
             $leader = $form->getData();
 
+
             $manager->persist($leader);
             $manager->flush();
 

@@ -59,19 +59,28 @@ class HallController extends AbstractController
 
             $leader = $form->getData()->getLeader()->getUser();
             $leaderHall = $form->getData()->getLeaderHall()->getUser();
+            $permissionLeader = $form->getData()->getLeader()->getPermissionLeader();
+
+            $permissionLeaderSellDrinks = $permissionLeader->isIsSellDrinks();
+            $permissionLeaderMembersWrite = $permissionLeader->isIsMembersWrite();
+            $permissionLeaderMembersRead = $permissionLeader->isIsMembersRead();
+            $permissionLeaderMembersAdd = $permissionLeader->isIsMembersAdd();
+            $permissionLeaderMembersStatistiqueRead = $permissionLeader->isIsMembersStatistiqueRead();
+            $permissionLeaderPaymentSchedulesWrite = $permissionLeader->isIsPaymentSchedulesWrite();
+            $permissionLeaderPaymentSchedulesAdd = $permissionLeader->isIsPaymentSchedulesAdd();
 
             //this condition checks that the leaderHall does not have a hall
             if ($hall->getleaderHall()->getHall()->getId() == null) {
 
                 $permission = new Permission();
 
-                $permission->setIsMembersAdd(1);
-                $permission->setIsMembersRead(1);
-                $permission->setIsMembersStatistiqueRead(1);
-                $permission->setIsMembersWrite(1);
-                $permission->setIsPaymentSchedulesAdd(1);
-                $permission->setIsSellDrinks(1);
-                $permission->setIsPaymentSchedulesWrite(1);
+                $permission->setIsMembersAdd($permissionLeaderMembersAdd);
+                $permission->setIsMembersRead($permissionLeaderMembersRead);
+                $permission->setIsMembersStatistiqueRead($permissionLeaderMembersStatistiqueRead);
+                $permission->setIsMembersWrite($permissionLeaderMembersWrite);
+                $permission->setIsPaymentSchedulesAdd($permissionLeaderPaymentSchedulesAdd);
+                $permission->setIsSellDrinks($permissionLeaderSellDrinks);
+                $permission->setIsPaymentSchedulesWrite($permissionLeaderPaymentSchedulesWrite);
                 $permission->setHall($hall);
                 $manager->persist($permission);
 

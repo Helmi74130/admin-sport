@@ -124,6 +124,9 @@ class Leader
     #[ORM\OneToOne(mappedBy: 'leader', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    #[ORM\OneToOne(mappedBy: 'leader', cascade: ['persist', 'remove'])]
+    private ?PermissionLeader $permissionLeader = null;
+
     public function __construct()
     {
         $this->hall = new ArrayCollection();
@@ -187,6 +190,28 @@ class Leader
             return $this->civility.' '.$this->name.' '.$this->firstname.' gère '.count($test) .' salle(s) pour le moment' ;
 
             }
+    }
+
+    public function getPermissionLeader(): ?PermissionLeader
+    {
+        return $this->permissionLeader;
+    }
+
+    public function setPermissionLeader(?PermissionLeader $permissionLeader): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($permissionLeader === null && $this->permissionLeader !== null) {
+            $this->permissionLeader->setLeader(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($permissionLeader !== null && $permissionLeader->getLeader() !== $this) {
+            $permissionLeader->setLeader($this);
+        }
+
+        $this->permissionLeader = $permissionLeader;
+
+        return $this;
     }
 
 }

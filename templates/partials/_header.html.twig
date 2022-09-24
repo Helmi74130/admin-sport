@@ -21,9 +21,6 @@
                     </li>
                 {% elseif is_granted('ROLE_USER') %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_contact') }}"><i class="bi bi-envelope-paper fs-4"></i> Nous Contacter</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_my_account') }}"><i class="bi bi-nut fs-4"></i> Parametres</a>
                     </li>
                     <li class="nav-item">
@@ -31,7 +28,7 @@
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a type="button" class="nav-link btn btn-success text-light" href="{{ path('app_login') }}">Connexion</a>
+                        <a class="nav-link" href="{{ path('app_contact') }}"><i class="bi bi-envelope-paper fs-4"></i> Nous Contacter</a>
                     </li>
                 {% endif %}
             </ul>

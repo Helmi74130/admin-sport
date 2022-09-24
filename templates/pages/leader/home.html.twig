@@ -51,7 +51,8 @@
             <div class="row justify-content-around">
                 <div class="form-check form-switch col-11 fs-4">
                     <input class="form-check-input" type="checkbox" id="switch"  checked="">
-                    <label class="form-check-label" for="switch">Filtre active</label>
+                    <label class="form-check-label" for="switch">Filtrer par active</label>
+                    <p id="textTogle"></p>
                 </div>
                 <div class="col-12">
                     <table class=" table table-striped">
@@ -130,6 +131,7 @@
         const searchInput = document.querySelector("#search")
         const searchResult = document.querySelector("#searchResult")
         let itemsNumber = document.querySelector("#itemsNumber")
+        const textTogle = document.querySelector("#textTogle")
 
         //This function create user list in the dom
         function CreateUserList(dataList){
@@ -138,7 +140,6 @@
                 let url = Routing.generate('app_leader_view',{id:''+element.id+''} )
                 let textActive =''
                 element.user.isActive ? textActive='oui' : textActive='non'
-
 
                 const listItem = document.createElement("tr")
                 listItem.innerHTML = `
@@ -151,9 +152,9 @@
                     <td data-label="Modifier"><a type="button" class="" data-bs-toggle="modal" data-bs-target="#editModal${element.user.id}"><i class="bi bi-pencil-square"></i></a></td>
                     <td data-label="Supprimer"><a type="button" class="text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${element.user.id}"><i class="bi bi-trash"></i></a></td>
                     `
-                itemsNumber.innerText = 'Il y a '+dataList.length+' item(s) au total'
-
+                itemsNumber.innerText = 'Il y a '+ dataList.length+' item(s) au total'
                 searchResult.appendChild(listItem)
+
             })
         }
         CreateUserList(leadersHall)
@@ -183,9 +184,13 @@
             if (valueSwitch === true){
                 const dataActive = leadersHall.filter(el=> el.user.isActive === true)
                 CreateUserList(dataActive)
+                itemsNumber.innerText = 'Il y a '+ dataActive.length+' item(s) au total'
+                textTogle.textContent = 'Gérants actives'
             }else{
                 const dataNoActive = leadersHall.filter(el=> el.user.isActive === false)
                 CreateUserList(dataNoActive)
+                itemsNumber.innerText = 'Il y a '+ dataNoActive.length+' item(s) au total'
+                textTogle.textContent = 'Gérants non actives'
             }
         }
     </script>

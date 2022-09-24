@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\PermissionRepository;
+use App\Repository\PermissionLeaderRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PermissionRepository::class)]
-class Permission
+#[ORM\Entity(repositoryClass: PermissionLeaderRepository::class)]
+class PermissionLeader
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -34,9 +34,8 @@ class Permission
     #[ORM\Column]
     private ?bool $isPaymentSchedulesAdd = true;
 
-    #[ORM\OneToOne(inversedBy: 'permissions', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Hall $hall = null;
+    #[ORM\OneToOne(inversedBy: 'permissionLeader', cascade: ['persist', 'remove'])]
+    private ?Leader $leader = null;
 
 
     public function getId(): ?int
@@ -134,18 +133,16 @@ class Permission
         return $this->id;
     }
 
-    public function getHall(): ?Hall
+    public function getLeader(): ?Leader
     {
-        return $this->hall;
+        return $this->leader;
     }
 
-    public function setHall(Hall $hall): self
+    public function setLeader(?Leader $leader): self
     {
-        $this->hall = $hall;
+        $this->leader = $leader;
 
         return $this;
     }
-
-
 
 }

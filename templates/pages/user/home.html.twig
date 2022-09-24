@@ -80,7 +80,6 @@
     <script>
 
         let allLeaders = JSON.parse({{ userSerialze | json_encode| raw}})
-        console.log(allLeaders)
 
         const searchInput = document.querySelector("#search")
         const searchResult = document.querySelector("#searchResult")
@@ -151,9 +150,11 @@
             if (valueSwitch === true){
                 const dataActive = allLeaders.filter(el=> el.isActive === true)
                 CreateUserList(dataActive)
+                itemsNumber.innerText = 'Il y a '+ dataActive.length+' item(s) au total'
             }else{
                 const dataNoActive = allLeaders.filter(el=> el.isActive === false)
                 CreateUserList(dataNoActive)
+                itemsNumber.innerText = 'Il y a '+ dataNoActive.length+' item(s) au total'
             }
         }
     </script>

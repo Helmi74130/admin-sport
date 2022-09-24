@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Apps | Editer Permission{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <div class="row justify-content-around">
+        <div class="col-6">
+            <h1 class="m-5">Veuillez accorder les permissions à ce gérant</h1>
+        </div>
+        <div class="col-6 d-flex flex-column">
+            <button class="btn btn-outline-warning m-5 align-self-end">Ajouter</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-around">
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
+                <p>{{ form_widget(form.isSellDrinks) }}</p>
+            </div>
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
+                <p>{{ form_row(form.isMembersWrite) }}</p>
+            </div>
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
+                <p class="">{{ form_row(form.isMembersRead) }}</p>
+            </div>
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
+                <p>{{ form_row(form.isMembersAdd) }}</p>
+            </div>
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
+                <p>{{ form_row(form.isMembersStatistiqueRead) }}</p>
+            </div>
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
+                <p>{{ form_row(form.isPaymentSchedulesWrite) }}</p>
+            </div>
+            <div class="col-lg-5 col-12 text-center mb-5 form-check form-switch border-bottom">
+                <p>{{ form_row(form.isPaymentSchedulesAdd) }}</p>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
