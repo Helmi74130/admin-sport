@@ -42,6 +42,15 @@ Role| E-mail   | Mot de passe              |
  Administrateur|`admin@admin.fr` | **123456**|
   Franchise|`martinez@test.fr` | **password**|
   Structure| `avenel@test.fr` | **password**|
+  
+ 
+ ## Manuel d'utilisation
+ 
+![Web 1920 – 1](https://user-images.githubusercontent.com/88458882/197732853-8b45b19e-9d0f-4a7c-aef6-cd56c8fa418b.png)
+![Web 1920 – 2](https://user-images.githubusercontent.com/88458882/197732864-2df695dc-58af-4ee1-b94c-177b34b147cc.png)
+![Web 1920 – 3](https://user-images.githubusercontent.com/88458882/197732866-10c8f38f-ebb2-4f35-bcee-dfffaedb1003.png)
+![Web 1920 – 4](https://user-images.githubusercontent.com/88458882/197732868-eb90f939-35be-4dec-ac50-c5205bd2d621.png)
+
 
 
 ## En cas de question
